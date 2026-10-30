@@ -1,0 +1,17 @@
+seed: 42
+
+vectorizer:
+  word_ngram_range: [1, 2]
+  char_ngram_range: [3, 5]
+  word_max_features: 50000
+  char_max_features: 50000
+  min_df: 2
+  max_df: 0.95
+  sublinear_tf: true
+  lowercase: true
+
+model:
+  C: 1.0
+  max_iter: 2000
+  solver: lbfgs
+  class_weight: balanced

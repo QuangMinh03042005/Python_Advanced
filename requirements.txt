@@ -1,11 +1,11 @@
-# Python 3.12 is required.
-# At setup time, PyTorch did not publish wheels for Python 3.15.
+# Project uses Python 3.12 with CPU-only PyTorch.
 # CPU-only PyTorch index:
 --extra-index-url https://download.pytorch.org/whl/cpu
 
 torch==2.14.1+cpu
 transformers==5.20.2
 scikit-learn==1.9.1
+joblib==1.6.0
 pandas==3.1.0
 numpy==2.5.4
 scipy==1.18.1
