@@ -632,7 +632,7 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có `src/data/load.py` và `configs/label_map.json`.
 - [x] Đã xác minh label mapping và data audit.
 - [x] Đã có EDA, hình và báo cáo `reports/eda_summary.md`.
-- [ ] Chưa có baseline.
+- [x] Đã có baseline TF-IDF + Logistic Regression và `reports/baseline_report.md`.
 - [ ] Chưa có TextCNN multi-task.
 - [ ] Chưa có PhoBERT multi-task.
 - [ ] Chưa có demo.
@@ -640,14 +640,13 @@ Một task chỉ được coi là xong khi:
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Chạy baseline TF-IDF cho sentiment và topic.
-2. Cài đặt TextCNN single-task.
-3. Cài đặt TextCNN multi-task.
-4. Chạy smoke test.
-5. Thêm PhoBERT frozen.
-6. Làm demo Streamlit.
-7. Chạy thí nghiệm chính thức.
-8. Viết báo cáo.
+1. Cài đặt TextCNN single-task.
+2. Cài đặt TextCNN multi-task.
+3. Chạy smoke test.
+4. Thêm PhoBERT frozen.
+5. Làm demo Streamlit.
+6. Chạy thí nghiệm chính thức.
+7. Viết báo cáo.
 
 ---
 

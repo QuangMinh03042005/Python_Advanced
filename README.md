@@ -11,7 +11,7 @@
 - [x] Đã tải UIT-VSFC và viết data loader
 - [x] Đã xác minh label mapping và data audit
 - [x] EDA: phân bố nhãn, độ dài, trùng lặp, tương quan sentiment × topic
-- [ ] Baseline TF-IDF
+- [x] Baseline TF-IDF + Logistic Regression
 - [ ] TextCNN multi-task
 - [ ] PhoBERT multi-task
 - [ ] Demo Streamlit
@@ -128,6 +128,36 @@ Kết quả chính:
 - `facility` gần như luôn tiêu cực: **474/497** câu.
 - Sentiment và topic có tương quan mạnh; cần cẩn thận shortcut khi multi-task.
 - Có 1 câu trùng trong train, không có trùng giữa các split.
+
+## Baseline TF-IDF
+
+Chạy:
+
+```powershell
+python -m src.models.baseline
+```
+
+Output:
+
+```text
+reports/baseline_report.md
+reports/baseline_metrics.json
+reports/results.csv
+reports/baseline_*_per_class.csv
+reports/figures/baseline_*_confusion.png
+```
+
+Kết quả hiện tại:
+
+| Task | Split | Accuracy | Macro-F1 |
+|---|---|---:|---:|
+| sentiment | dev | 0.8857 | 0.7579 |
+| sentiment | test | 0.8733 | 0.7400 |
+| topic | dev | 0.8244 | 0.7301 |
+| topic | test | 0.8105 | 0.7247 |
+| joint | test | 0.7227 | — |
+
+Nhận xét: accuracy cao nhưng macro-F1 thấp hơn đáng kể do `neutral` và `others` ít mẫu.
 
 ## Cấu trúc dự kiến
 
