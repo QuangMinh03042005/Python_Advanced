@@ -12,6 +12,7 @@
 - [x] Đã xác minh label mapping và data audit
 - [x] EDA: phân bố nhãn, độ dài, trùng lặp, tương quan sentiment × topic
 - [x] Baseline TF-IDF + Logistic Regression
+- [x] TextCNN single-task
 - [ ] TextCNN multi-task
 - [ ] PhoBERT multi-task
 - [ ] Demo Streamlit
@@ -158,6 +159,38 @@ Kết quả hiện tại:
 | joint | test | 0.7227 | — |
 
 Nhận xét: accuracy cao nhưng macro-F1 thấp hơn đáng kể do `neutral` và `others` ít mẫu.
+
+## TextCNN single-task
+
+Chạy:
+
+```powershell
+python -m src.train_textcnn --task both
+```
+
+Smoke test:
+
+```powershell
+python -m src.train_textcnn --task both --smoke-test
+```
+
+Kết quả hiện tại:
+
+| Task | Split | Accuracy | Macro-F1 | So với baseline |
+|---|---|---:|---:|---:|
+| sentiment | dev | 0.9172 | 0.8077 | +0.0498 |
+| sentiment | test | 0.8932 | 0.7621 | +0.0221 |
+| topic | dev | 0.8345 | 0.7384 | +0.0083 |
+| topic | test | 0.8301 | 0.7355 | +0.0108 |
+| joint | test | 0.7536 | — | +0.0309 |
+
+Điểm đáng chú ý:
+
+- `neutral` F1 tăng từ 0.4087 lên 0.4490.
+- `others` F1 tăng từ 0.4336 lên 0.4444.
+- Best epoch: sentiment 9, topic 5.
+- Thời gian train CPU: khoảng 75 giây cho sentiment, 49 giây cho topic.
+- Checkpoint nằm trong `models/textcnn/` và không commit.
 
 ## Cấu trúc dự kiến
 

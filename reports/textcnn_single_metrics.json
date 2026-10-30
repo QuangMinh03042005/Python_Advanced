@@ -1,0 +1,71 @@
+{
+  "run_id": "textcnn_single_20261030_163049",
+  "git_commit": "a5db0e7",
+  "config": {
+    "seed": 42,
+    "data": {
+      "tokenized_dir": "data/processed/uit_vsfc_tokenized",
+      "max_len": 48,
+      "min_freq": 2,
+      "max_vocab_size": 50000
+    },
+    "model": {
+      "embed_dim": 100,
+      "num_filters": 100,
+      "kernel_sizes": [
+        3,
+        4,
+        5
+      ],
+      "dropout": 0.5,
+      "embedding_dropout": 0.1
+    },
+    "training": {
+      "batch_size": 32,
+      "epochs": 15,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 3,
+      "max_grad_norm": 1.0,
+      "num_workers": 0,
+      "class_weight": true
+    }
+  },
+  "device": "cpu",
+  "sentiment": {
+    "dev": {
+      "accuracy": 0.9172457359444094,
+      "macro_f1": 0.8077008768183472,
+      "weighted_f1": 0.9195045693221383
+    },
+    "test": {
+      "accuracy": 0.8932406822488945,
+      "macro_f1": 0.7621072658658762,
+      "weighted_f1": 0.8939119796961771
+    }
+  },
+  "topic": {
+    "dev": {
+      "accuracy": 0.8344914718888187,
+      "macro_f1": 0.7383801544930485,
+      "weighted_f1": 0.8445390642239696
+    },
+    "test": {
+      "accuracy": 0.8300694883133292,
+      "macro_f1": 0.7355196573073184,
+      "weighted_f1": 0.8420566723589957
+    }
+  },
+  "joint_accuracy": {
+    "dev": 0.7738471257106759,
+    "test": 0.7536323436512951
+  },
+  "best_epoch": {
+    "sentiment": 9,
+    "topic": 5
+  },
+  "checkpoints": {
+    "sentiment": "models/textcnn/sentiment_best.pt",
+    "topic": "models/textcnn/topic_best.pt"
+  }
+}

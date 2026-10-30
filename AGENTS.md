@@ -205,7 +205,7 @@ pytest -q
 Nếu có sửa model hoặc dữ liệu, chạy thêm smoke test:
 
 ```powershell
-python -m src.train --config configs/textcnn.yaml --smoke-test
+python -m src.train_textcnn --task both --smoke-test --reports-dir .tmp\smoke_reports --models-dir .tmp\smoke_models --runs-dir .tmp\smoke_runs
 ```
 
 Nếu chưa có test hoặc chưa có script, ghi rõ phần nào chưa kiểm tra.
@@ -399,7 +399,7 @@ Nếu repo chưa cài `ruff`, không bắt buộc, nhưng phải giữ code nh�
 Chạy 1 epoch trên 100 mẫu:
 
 ```powershell
-python -m src.train --config configs/textcnn.yaml --smoke-test
+python -m src.train_textcnn --task both --smoke-test --reports-dir .tmp\smoke_reports --models-dir .tmp\smoke_models --runs-dir .tmp\smoke_runs
 ```
 
 Smoke test phải:
@@ -555,14 +555,15 @@ pytest -q
 ### Train
 
 ```powershell
-python -m src.train --config configs/textcnn.yaml
-python -m src.train --config configs/phobert.yaml
+python -m src.train_textcnn --task both
+python -m src.train_textcnn --task sentiment
+python -m src.train_textcnn --task topic
 ```
 
 ### Smoke test
 
 ```powershell
-python -m src.train --config configs/textcnn.yaml --smoke-test
+python -m src.train_textcnn --task both --smoke-test --reports-dir .tmp\smoke_reports --models-dir .tmp\smoke_models --runs-dir .tmp\smoke_runs
 ```
 
 ### Evaluate
@@ -633,6 +634,7 @@ Một task chỉ được coi là xong khi:
 - [x] Đã xác minh label mapping và data audit.
 - [x] Đã có EDA, hình và báo cáo `reports/eda_summary.md`.
 - [x] Đã có baseline TF-IDF + Logistic Regression và `reports/baseline_report.md`.
+- [x] Đã có TextCNN single-task và `reports/textcnn_single_report.md`.
 - [ ] Chưa có TextCNN multi-task.
 - [ ] Chưa có PhoBERT multi-task.
 - [ ] Chưa có demo.
@@ -640,13 +642,12 @@ Một task chỉ được coi là xong khi:
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Cài đặt TextCNN single-task.
-2. Cài đặt TextCNN multi-task.
-3. Chạy smoke test.
-4. Thêm PhoBERT frozen.
-5. Làm demo Streamlit.
-6. Chạy thí nghiệm chính thức.
-7. Viết báo cáo.
+1. Cài đặt TextCNN multi-task.
+2. Chạy smoke test multi-task.
+3. Thêm PhoBERT frozen.
+4. Làm demo Streamlit.
+5. Chạy thí nghiệm chính thức.
+6. Viết báo cáo.
 
 ---
 
