@@ -640,14 +640,13 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có TextCNN single-task và `reports/textcnn_single_report.md`.
 - [x] Đã có TextCNN multi-task và `reports/textcnn_multitask_report.md`.
 - [x] Đã có PhoBERT frozen multi-task và `reports/phobert_multitask_report.md`.
-- [ ] Chưa có demo.
+- [x] Đã có demo Streamlit và `src.predict`.
 - [ ] Chưa có báo cáo.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Làm demo Streamlit.
-2. Chạy thí nghiệm 3 seed.
-3. Viết báo cáo.
+1. Chạy thí nghiệm 3 seed.
+2. Viết báo cáo.
 
 ---
 

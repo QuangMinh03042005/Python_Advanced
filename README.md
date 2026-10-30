@@ -15,7 +15,7 @@
 - [x] TextCNN single-task
 - [x] TextCNN multi-task
 - [x] PhoBERT multi-task
-- [ ] Demo Streamlit
+- [x] Demo Streamlit
 - [ ] Báo cáo
 
 ## Yêu cầu
@@ -258,6 +258,36 @@ So sánh test:
 - Best epoch: 15.
 - Chỉ train head: **17.9 giây** sau khi đã cache embedding.
 - Không fine-tune PhoBERT.
+
+## Demo Streamlit
+
+Chạy:
+
+```powershell
+.\scripts\activate.ps1
+streamlit run app\streamlit_app.py
+```
+
+Mở:
+
+```text
+http://127.0.0.1:8501
+```
+
+Demo gồm:
+
+- Nhập một câu → dự đoán cảm xúc + chủ đề.
+- Hiển thị confidence và xác suất từng lớp.
+- Cảnh báo khi confidence thấp.
+- Hiển thị token sau tách từ.
+- Tab so sánh kết quả test của các mô hình.
+- Tab giới thiệu và hạn chế.
+
+Có thể test nhanh bằng CLI:
+
+```powershell
+python -m src.predict --text "Cơ sở vật chất còn yếu, phòng học thiếu máy chiếu"
+```
 
 ## Cấu trúc dự kiến
 
