@@ -312,6 +312,31 @@ Kết luận:
 
 Chi tiết: [reports/seed_summary.md](reports/seed_summary.md).
 
+## Kiểm định thống kê
+
+- McNemar exact test cho correctness từng câu.
+- Bootstrap 95% CI cho khác biệt macro-F1 / joint accuracy, 2.000 lần resample.
+- Chạy trên cả 3 seed, không chỉ một seed.
+
+Kết quả nhất quán:
+
+| So sánh | Task | McNemar p<0.05 | CI excludes 0 |
+|---|---|---:|---:|
+| keyword vs frozen | topic | 3/3 | 3/3 |
+| keyword vs frozen | joint | 3/3 | 3/3 |
+| keyword vs TextCNN | joint | 3/3 | 3/3 |
+| keyword vs TextCNN | topic | 1/3 | 1/3 |
+| keyword vs frozen/TextCNN | sentiment | 3/3 McNemar | 0/3 hoặc 1/3 CI |
+
+Diễn giải:
+
+- Cải thiện **topic** so với PhoBERT frozen là nhất quán.
+- Cải thiện **joint accuracy** so với cả hai mô hình là nhất quán.
+- Chưa đủ bằng chứng để khẳng định cải thiện sentiment F1.
+- So với TextCNN, lợi thế topic không ổn định qua 3 seed.
+
+Chi tiết: [reports/statistical_tests.md](reports/statistical_tests.md).
+
 ## Demo Streamlit
 
 Chạy:

@@ -646,6 +646,7 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có PhoBERT keyword-aware multi-task và `reports/phobert_keyword_multitask_report.md`.
 - [x] Đã có demo Streamlit và `src.predict`.
 - [x] Đã có 3-seed evaluation và `reports/seed_summary.md`.
+- [x] Đã có McNemar + bootstrap và `reports/statistical_tests.md`.
 - [ ] Chưa có báo cáo.
 
 ### Thứ tự ưu tiên tiếp theo
