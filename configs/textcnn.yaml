@@ -1,0 +1,24 @@
+seed: 42
+
+data:
+  tokenized_dir: data/processed/uit_vsfc_tokenized
+  max_len: 48
+  min_freq: 2
+  max_vocab_size: 50000
+
+model:
+  embed_dim: 100
+  num_filters: 100
+  kernel_sizes: [3, 4, 5]
+  dropout: 0.5
+  embedding_dropout: 0.1
+
+training:
+  batch_size: 32
+  epochs: 15
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  patience: 3
+  max_grad_norm: 1.0
+  num_workers: 0
+  class_weight: true
