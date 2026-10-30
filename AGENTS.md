@@ -584,8 +584,10 @@ python -m src.predict --text "Cơ sở vật chất còn yếu"
 ### Demo
 
 ```powershell
-streamlit run app/streamlit_app.py
+.\scripts\run_demo.ps1
 ```
+
+Script này đặt `USERPROFILE` và cache Streamlit vào `.demo-home/` để tránh lỗi quyền với `C:\Users\<user>\.streamlit`.
 
 ---
 

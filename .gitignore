@@ -17,6 +17,8 @@ dist/
 .ruff-cache/
 .tmp/
 .hf-cache/
+.demo-home/
+.mpl-cache/
 
 # Environment / secrets
 .env

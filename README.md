@@ -264,8 +264,7 @@ So sánh test:
 Chạy:
 
 ```powershell
-.\scripts\activate.ps1
-streamlit run app\streamlit_app.py
+.\scripts\run_demo.ps1
 ```
 
 Mở:
@@ -273,6 +272,18 @@ Mở:
 ```text
 http://127.0.0.1:8501
 ```
+
+Script này đặt `USERPROFILE` và cache Streamlit vào `.demo-home/` để tránh lỗi
+`Access is denied: C:\Users\<user>\.streamlit` trong môi trường bị giới hạn quyền.
+
+Nếu chạy trực tiếp:
+
+```powershell
+.\scripts\activate.ps1
+streamlit run app\streamlit_app.py
+```
+
+có thể gặp lỗi trên; khi đó dùng `scripts\run_demo.ps1`.
 
 Demo gồm:
 
