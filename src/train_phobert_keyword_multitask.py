@@ -356,8 +356,11 @@ def run(
     runs_dir: str | Path,
     smoke_test: bool,
     force_embeddings: bool = False,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     config = load_config(config_path)
+    if seed is not None:
+        config["seed"] = seed
     set_seed(config["seed"])
     torch.set_num_threads(max(1, min(8, os.cpu_count() or 1)))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -695,6 +698,7 @@ def main() -> None:
     parser.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR)
     parser.add_argument("--smoke-test", action="store_true")
     parser.add_argument("--force-embeddings", action="store_true")
+    parser.add_argument("--seed", type=int, default=None)
     args = parser.parse_args()
 
     result = run(
@@ -704,6 +708,7 @@ def main() -> None:
         runs_dir=args.runs_dir,
         smoke_test=args.smoke_test,
         force_embeddings=args.force_embeddings,
+        seed=args.seed,
     )
     print(f"run_id: {result['run_id']}")
     print(f"best epoch: {result['best_epoch']}")

@@ -453,10 +453,13 @@ def run(
     runs_dir: str | Path,
     smoke_test: bool,
     lambda_topic: float | None = None,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     config = load_config(config_path)
     if lambda_topic is not None:
         config["lambda_topic"] = lambda_topic
+    if seed is not None:
+        config["seed"] = seed
     set_seed(config["seed"])
     torch.set_num_threads(max(1, min(8, os.cpu_count() or 1)))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -791,6 +794,7 @@ def main() -> None:
     parser.add_argument("--models-dir", type=Path, default=DEFAULT_MODELS_DIR)
     parser.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR)
     parser.add_argument("--lambda-topic", type=float, default=None)
+    parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--smoke-test", action="store_true")
     args = parser.parse_args()
 
@@ -802,6 +806,7 @@ def main() -> None:
         runs_dir=args.runs_dir,
         smoke_test=args.smoke_test,
         lambda_topic=args.lambda_topic,
+        seed=args.seed,
     )
     print(f"run_id: {result['run_id']}")
     print(f"device: {result['device']}")
