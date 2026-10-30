@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Sequence
 
+import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
@@ -148,3 +149,46 @@ def collate_multitask(
     sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
     topic_labels = torch.stack([item["topic_label"] for item in batch])
     return input_ids, sentiment_labels, topic_labels
+
+
+class EmbeddingMultiTaskDataset(Dataset):
+    def __init__(
+        self,
+        embeddings: np.ndarray,
+        frame: pd.DataFrame,
+        sentiment2id: dict[str, int],
+        topic2id: dict[str, int],
+    ) -> None:
+        if len(embeddings) != len(frame):
+            raise ValueError("Embedding and frame lengths do not match")
+        if "sentiment" not in frame.columns or "topic" not in frame.columns:
+            raise ValueError("Missing sentiment/topic columns")
+
+        self.embeddings = np.asarray(embeddings, dtype=np.float32)
+        self.sentiment_labels = [
+            sentiment2id[str(label)]
+            for label in frame["sentiment"].tolist()
+        ]
+        self.topic_labels = [
+            topic2id[str(label)]
+            for label in frame["topic"].tolist()
+        ]
+
+    def __len__(self) -> int:
+        return len(self.embeddings)
+
+    def __getitem__(self, index: int) -> dict[str, torch.Tensor]:
+        return {
+            "embedding": torch.from_numpy(self.embeddings[index]),
+            "sentiment_label": torch.tensor(self.sentiment_labels[index], dtype=torch.long),
+            "topic_label": torch.tensor(self.topic_labels[index], dtype=torch.long),
+        }
+
+
+def collate_embeddings(
+    batch: list[dict[str, torch.Tensor]],
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    embeddings = torch.stack([item["embedding"] for item in batch])
+    sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
+    topic_labels = torch.stack([item["topic_label"] for item in batch])
+    return embeddings, sentiment_labels, topic_labels

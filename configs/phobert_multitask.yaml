@@ -1,0 +1,23 @@
+seed: 42
+lambda_topic: 1.0
+
+data:
+  tokenized_dir: data/processed/uit_vsfc_tokenized
+  embedding_dir: data/processed/uit_vsfc_phobert
+  model_name: vinai/phobert-base
+  max_len: 128
+  embedding_batch_size: 16
+
+model:
+  shared_hidden: 256
+  dropout: 0.3
+
+training:
+  batch_size: 64
+  epochs: 40
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  patience: 6
+  max_grad_norm: 1.0
+  num_workers: 0
+  class_weight: true
