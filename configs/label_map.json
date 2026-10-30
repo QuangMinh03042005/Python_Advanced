@@ -1,0 +1,31 @@
+{
+  "sentiment": {
+    "id2label": {
+      "0": "negative",
+      "1": "neutral",
+      "2": "positive"
+    },
+    "label2id": {
+      "negative": 0,
+      "neutral": 1,
+      "positive": 2
+    }
+  },
+  "topic": {
+    "id2label": {
+      "0": "lecturer",
+      "1": "training_program",
+      "2": "facility",
+      "3": "others"
+    },
+    "label2id": {
+      "lecturer": 0,
+      "training_program": 1,
+      "facility": 2,
+      "others": 3
+    }
+  },
+  "source": "UIT-VSFC",
+  "verified_on": "2026-10-30",
+  "notes": "Mapping verified by inspecting examples from the raw label files. Topic order differs from the SEACrowd class order for facility/others."
+}
