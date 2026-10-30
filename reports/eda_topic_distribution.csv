@@ -1,0 +1,4 @@
+split,lecturer,training_program,facility,others
+train,8166,2201,497,562
+dev,1151,267,70,95
+test,2290,572,145,159

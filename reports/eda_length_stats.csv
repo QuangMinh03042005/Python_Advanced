@@ -1,0 +1,9 @@
+split,unit,count,mean,median,p95,max
+train,n_chars,11426,59.08,47.0,141.0,660
+train,n_tokens,11426,14.31,11.0,33.0,159
+dev,n_chars,1583,56.36,45.0,132.0,718
+dev,n_tokens,1583,13.67,11.0,31.0,161
+test,n_chars,3166,58.84,46.0,147.0,411
+test,n_tokens,3166,14.22,11.0,34.0,98
+all,n_chars,16175,58.77,46.0,141.0,718
+all,n_tokens,16175,14.23,11.0,33.0,161
