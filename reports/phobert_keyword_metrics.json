@@ -1,0 +1,63 @@
+{
+  "run_id": "phobert_keyword_20261030_222651",
+  "git_commit": "0f865a7",
+  "config": {
+    "seed": 42,
+    "lambda_topic": 1.0,
+    "keyword_loss_weight": 0.5,
+    "data": {
+      "tokenized_dir": "data/processed/uit_vsfc_tokenized",
+      "embedding_dir": "data/processed/uit_vsfc_phobert",
+      "model_name": "vinai/phobert-base",
+      "max_len": 128,
+      "embedding_batch_size": 16
+    },
+    "model": {
+      "shared_hidden": 256,
+      "num_keyword_features": 12,
+      "dropout": 0.3
+    },
+    "training": {
+      "batch_size": 64,
+      "epochs": 40,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 6,
+      "max_grad_norm": 1.0,
+      "num_workers": 0,
+      "class_weight": "sqrt_balanced"
+    }
+  },
+  "device": "cpu",
+  "best_epoch": 13,
+  "train_time_sec": 22.044674700000087,
+  "metrics": {
+    "dev": {
+      "sentiment": {
+        "accuracy": 0.9248262792166771,
+        "macro_f1": 0.789866466944809,
+        "weighted_f1": 0.9229394650354988
+      },
+      "topic": {
+        "accuracy": 0.8780795957043588,
+        "macro_f1": 0.7696912200623671,
+        "weighted_f1": 0.8764883865618064
+      },
+      "joint_accuracy": 0.8186986734049273
+    },
+    "test": {
+      "sentiment": {
+        "accuracy": 0.914087176247631,
+        "macro_f1": 0.7787982749318726,
+        "weighted_f1": 0.9124449079607705
+      },
+      "topic": {
+        "accuracy": 0.8695514845230575,
+        "macro_f1": 0.7633017004257449,
+        "weighted_f1": 0.8689222835015131
+      },
+      "joint_accuracy": 0.8054327226784587
+    }
+  },
+  "checkpoint": "models/phobert_keyword_multitask/phobert_keyword_multitask_best.pt"
+}
