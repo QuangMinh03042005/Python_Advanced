@@ -101,3 +101,50 @@ def collate_batch(batch: list[dict[str, torch.Tensor]]) -> tuple[torch.Tensor, t
     input_ids = torch.stack([item["input_ids"] for item in batch])
     labels = torch.stack([item["label"] for item in batch])
     return input_ids, labels
+
+
+class TextCNNMultiTaskDataset(Dataset):
+    def __init__(
+        self,
+        frame: pd.DataFrame,
+        vocab: Vocab,
+        sentiment2id: dict[str, int],
+        topic2id: dict[str, int],
+        max_len: int,
+    ) -> None:
+        if "tokens" not in frame.columns:
+            raise ValueError("Missing tokens column")
+        if "sentiment" not in frame.columns or "topic" not in frame.columns:
+            raise ValueError("Missing sentiment/topic columns")
+
+        self.input_ids = [
+            vocab.encode(str(tokens).split(), max_len=max_len)
+            for tokens in frame["tokens"].tolist()
+        ]
+        self.sentiment_labels = [
+            sentiment2id[str(label)]
+            for label in frame["sentiment"].tolist()
+        ]
+        self.topic_labels = [
+            topic2id[str(label)]
+            for label in frame["topic"].tolist()
+        ]
+
+    def __len__(self) -> int:
+        return len(self.input_ids)
+
+    def __getitem__(self, index: int) -> dict[str, torch.Tensor]:
+        return {
+            "input_ids": torch.tensor(self.input_ids[index], dtype=torch.long),
+            "sentiment_label": torch.tensor(self.sentiment_labels[index], dtype=torch.long),
+            "topic_label": torch.tensor(self.topic_labels[index], dtype=torch.long),
+        }
+
+
+def collate_multitask(
+    batch: list[dict[str, torch.Tensor]],
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    input_ids = torch.stack([item["input_ids"] for item in batch])
+    sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
+    topic_labels = torch.stack([item["topic_label"] for item in batch])
+    return input_ids, sentiment_labels, topic_labels
