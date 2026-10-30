@@ -13,7 +13,7 @@
 - [x] EDA: phân bố nhãn, độ dài, trùng lặp, tương quan sentiment × topic
 - [x] Baseline TF-IDF + Logistic Regression
 - [x] TextCNN single-task
-- [ ] TextCNN multi-task
+- [x] TextCNN multi-task
 - [ ] PhoBERT multi-task
 - [ ] Demo Streamlit
 - [ ] Báo cáo
@@ -191,6 +191,40 @@ Kết quả hiện tại:
 - Best epoch: sentiment 9, topic 5.
 - Thời gian train CPU: khoảng 75 giây cho sentiment, 49 giây cho topic.
 - Checkpoint nằm trong `models/textcnn/` và không commit.
+
+## TextCNN multi-task
+
+Chạy:
+
+```powershell
+python -m src.train_textcnn_multitask
+```
+
+Kết quả với `lambda_topic = 1.0`:
+
+| Task | Split | Accuracy | Macro-F1 |
+|---|---|---:|---:|
+| sentiment | dev | 0.9122 | 0.7997 |
+| sentiment | test | 0.8866 | 0.7556 |
+| topic | dev | 0.8465 | 0.7455 |
+| topic | test | 0.8370 | 0.7390 |
+| joint | test | 0.7552 | — |
+
+So với single-task:
+
+- Sentiment giảm nhẹ: **0.7621 → 0.7556**.
+- Topic tăng nhẹ: **0.7355 → 0.7390**.
+- Joint tăng nhẹ: **0.7536 → 0.7552**.
+
+Lambda sweep:
+
+| Lambda | Dev mean-F1 | Test sentiment | Test topic | Test joint |
+|---:|---:|---:|---:|---:|
+| 0.5 | 0.7693 | 0.7639 | 0.7175 | 0.7388 |
+| 1.0 | **0.7726** | 0.7556 | 0.7390 | 0.7552 |
+| 2.0 | 0.7724 | 0.7598 | 0.7496 | 0.7641 |
+
+`lambda = 1.0` được chọn theo **dev mean-F1**, không theo test.
 
 ## Cấu trúc dự kiến
 

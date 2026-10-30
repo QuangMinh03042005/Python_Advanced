@@ -1,0 +1,68 @@
+{
+  "run_id": "textcnn_multitask_20261030_164537",
+  "git_commit": "4051f09",
+  "config": {
+    "seed": 42,
+    "lambda_topic": 1.0,
+    "data": {
+      "tokenized_dir": "data/processed/uit_vsfc_tokenized",
+      "max_len": 48,
+      "min_freq": 2,
+      "max_vocab_size": 50000
+    },
+    "model": {
+      "embed_dim": 100,
+      "num_filters": 100,
+      "kernel_sizes": [
+        3,
+        4,
+        5
+      ],
+      "shared_hidden": 256,
+      "dropout": 0.5,
+      "embedding_dropout": 0.1
+    },
+    "training": {
+      "batch_size": 32,
+      "epochs": 15,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 3,
+      "max_grad_norm": 1.0,
+      "num_workers": 0,
+      "class_weight": true
+    }
+  },
+  "device": "cpu",
+  "best_epoch": 10,
+  "train_time_sec": 93.61357699999826,
+  "metrics": {
+    "dev": {
+      "sentiment": {
+        "accuracy": 0.9121920404295641,
+        "macro_f1": 0.7997104267192299,
+        "weighted_f1": 0.9145954485898214
+      },
+      "topic": {
+        "accuracy": 0.8464939987365762,
+        "macro_f1": 0.7454943208469075,
+        "weighted_f1": 0.8534667116387251
+      },
+      "joint_accuracy": 0.7858496525584333
+    },
+    "test": {
+      "sentiment": {
+        "accuracy": 0.8866077068856602,
+        "macro_f1": 0.7555927537099981,
+        "weighted_f1": 0.8884971887117988
+      },
+      "topic": {
+        "accuracy": 0.8370183196462413,
+        "macro_f1": 0.738962328619921,
+        "weighted_f1": 0.8455777560213681
+      },
+      "joint_accuracy": 0.7552116234996842
+    }
+  },
+  "checkpoint": "models/textcnn_multitask/multitask_best.pt"
+}
