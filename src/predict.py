@@ -15,10 +15,20 @@ os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS", "1")
 from transformers import AutoModel, AutoTokenizer  # noqa: E402
 
 from src.data.preprocess import tokenize_text  # noqa: E402
-from src.models.phobert_multitask import PhoBERTMultiTaskHead  # noqa: E402
+from src.features.keywords import (  # noqa: E402
+    extract_topic_keyword_features,
+    keyword_hits,
+)
+from src.models.phobert_multitask import (  # noqa: E402
+    KeywordAwarePhoBERTMultiTask,
+    PhoBERTMultiTaskHead,
+)
 
 DEFAULT_CHECKPOINT_PATH = (
-    PROJECT_ROOT / "models" / "phobert_multitask" / "phobert_multitask_best.pt"
+    PROJECT_ROOT
+    / "models"
+    / "phobert_keyword_multitask"
+    / "phobert_keyword_multitask_best.pt"
 )
 
 
@@ -45,18 +55,30 @@ class PhoBERTMultiTaskPredictor:
         self.topic_labels = list(checkpoint["topic_labels"])
         self.max_len = int(checkpoint["max_len"])
         self.embedding_model = str(checkpoint["embedding_model"])
+        self.model_type = str(checkpoint.get("model_type", "standard"))
+        self.keyword_aware = self.model_type == "keyword_aware"
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.embedding_model)
         self.encoder = AutoModel.from_pretrained(self.embedding_model).to(self.device)
         self.encoder.eval()
 
-        self.head = PhoBERTMultiTaskHead(
-            input_dim=int(self.encoder.config.hidden_size),
-            shared_hidden=int(self.config["model"]["shared_hidden"]),
-            num_sentiment_classes=len(self.sentiment_labels),
-            num_topic_classes=len(self.topic_labels),
-            dropout=float(self.config["model"]["dropout"]),
-        ).to(self.device)
+        if self.keyword_aware:
+            self.head = KeywordAwarePhoBERTMultiTask(
+                input_dim=int(self.encoder.config.hidden_size),
+                num_keyword_features=int(checkpoint["num_keyword_features"]),
+                shared_hidden=int(self.config["model"]["shared_hidden"]),
+                num_sentiment_classes=len(self.sentiment_labels),
+                num_topic_classes=len(self.topic_labels),
+                dropout=float(self.config["model"]["dropout"]),
+            ).to(self.device)
+        else:
+            self.head = PhoBERTMultiTaskHead(
+                input_dim=int(self.encoder.config.hidden_size),
+                shared_hidden=int(self.config["model"]["shared_hidden"]),
+                num_sentiment_classes=len(self.sentiment_labels),
+                num_topic_classes=len(self.topic_labels),
+                dropout=float(self.config["model"]["dropout"]),
+            ).to(self.device)
         self.head.load_state_dict(checkpoint["model_state"])
         self.head.eval()
 
@@ -77,7 +99,16 @@ class PhoBERTMultiTaskPredictor:
         encoder_output = self.encoder(**encoded)
         cls_embedding = encoder_output.last_hidden_state[:, 0, :]
 
-        sentiment_logits, topic_logits = self.head(cls_embedding)
+        if self.keyword_aware:
+            keyword_features = torch.tensor(
+                extract_topic_keyword_features(tokens),
+                dtype=torch.float32,
+                device=self.device,
+            ).unsqueeze(0)
+            sentiment_logits, topic_logits, _ = self.head(cls_embedding, keyword_features)
+        else:
+            sentiment_logits, topic_logits = self.head(cls_embedding)
+
         sentiment_probs = torch.softmax(sentiment_logits, dim=1)[0]
         topic_probs = torch.softmax(topic_logits, dim=1)[0]
 
@@ -96,6 +127,7 @@ class PhoBERTMultiTaskPredictor:
         return {
             "text": text,
             "tokens": tokens,
+            "topic_keywords": keyword_hits(tokens),
             "sentiment": {
                 "label": sentiment_sorted[0][0],
                 "confidence": sentiment_sorted[0][1],

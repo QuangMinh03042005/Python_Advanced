@@ -93,6 +93,15 @@ def render_prediction(result: dict[str, Any]) -> None:
     with st.expander("Token sau tách từ"):
         st.code(" | ".join(result["tokens"]))
 
+    keyword_hits = result.get("topic_keywords", {})
+    detected = [
+        f"{TOPIC_VN[topic_name]}: {', '.join(words)}"
+        for topic_name, words in keyword_hits.items()
+        if words
+    ]
+    if detected:
+        st.caption("Từ khóa chủ đề phát hiện: " + "; ".join(detected))
+
     suggestion = suggestion_for(sentiment["label"], topic["label"])
     if suggestion:
         st.info(f"Gợi ý (rule-based): {suggestion}")
@@ -104,14 +113,15 @@ def render_prediction(result: dict[str, Any]) -> None:
 
 
 st.title("💬 Phân tích phản hồi sinh viên")
-st.caption("PhoBERT frozen multi-task — dự đoán cảm xúc và chủ đề từ một câu tiếng Việt.")
+st.caption("PhoBERT keyword-aware multi-task — dự đoán cảm xúc và chủ đề từ một câu tiếng Việt.")
 
 with st.sidebar:
     st.header("Mô hình")
-    st.write("**PhoBERT frozen multi-task**")
+    st.write("**PhoBERT keyword-aware multi-task**")
     st.write("Encoder: `vinai/phobert-base`")
     st.write(f"Device: `{predictor.device}`")
     st.write(f"Max length: `{predictor.max_len}`")
+    st.write("Keyword features: 12")
     st.divider()
     st.caption(
         "Demo chỉ dùng cho mục đích học tập. "
@@ -206,8 +216,9 @@ with tab_about:
     st.write("UIT-VSFC — khoảng 16.000 câu phản hồi sinh viên tiếng Việt.")
     st.subheader("Mô hình")
     st.write(
-        "PhoBERT được đóng băng; embedding `[CLS]` được trích một lần,"
-        " sau đó train hai head phân loại."
+        "PhoBERT được đóng băng; embedding `[CLS]` được trích một lần."
+        " Topic head dùng thêm 12 keyword features và một keyword auxiliary loss"
+        " để giảm lỗi shortcut theo cụm từ."
     )
     st.subheader("Hạn chế")
     st.write(

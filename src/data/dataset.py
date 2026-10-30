@@ -11,6 +11,8 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
+from src.features.keywords import extract_topic_keyword_features
+
 PAD_TOKEN = "<pad>"
 UNK_TOKEN = "<unk>"
 PAD_ID = 0
@@ -192,3 +194,54 @@ def collate_embeddings(
     sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
     topic_labels = torch.stack([item["topic_label"] for item in batch])
     return embeddings, sentiment_labels, topic_labels
+
+
+class KeywordEmbeddingMultiTaskDataset(Dataset):
+    def __init__(
+        self,
+        embeddings: np.ndarray,
+        frame: pd.DataFrame,
+        sentiment2id: dict[str, int],
+        topic2id: dict[str, int],
+    ) -> None:
+        if len(embeddings) != len(frame):
+            raise ValueError("Embedding and frame lengths do not match")
+        if "tokens" not in frame.columns:
+            raise ValueError("Missing tokens column")
+        if "sentiment" not in frame.columns or "topic" not in frame.columns:
+            raise ValueError("Missing sentiment/topic columns")
+
+        self.embeddings = np.asarray(embeddings, dtype=np.float32)
+        token_lists = [str(tokens).split() for tokens in frame["tokens"].tolist()]
+        self.keyword_features = np.stack(
+            [extract_topic_keyword_features(tokens) for tokens in token_lists]
+        )
+        self.sentiment_labels = [
+            sentiment2id[str(label)]
+            for label in frame["sentiment"].tolist()
+        ]
+        self.topic_labels = [
+            topic2id[str(label)]
+            for label in frame["topic"].tolist()
+        ]
+
+    def __len__(self) -> int:
+        return len(self.embeddings)
+
+    def __getitem__(self, index: int) -> dict[str, torch.Tensor]:
+        return {
+            "embedding": torch.from_numpy(self.embeddings[index]),
+            "keyword_features": torch.from_numpy(self.keyword_features[index]),
+            "sentiment_label": torch.tensor(self.sentiment_labels[index], dtype=torch.long),
+            "topic_label": torch.tensor(self.topic_labels[index], dtype=torch.long),
+        }
+
+
+def collate_keyword_embeddings(
+    batch: list[dict[str, torch.Tensor]],
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    embeddings = torch.stack([item["embedding"] for item in batch])
+    keyword_features = torch.stack([item["keyword_features"] for item in batch])
+    sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
+    topic_labels = torch.stack([item["topic_label"] for item in batch])
+    return embeddings, keyword_features, sentiment_labels, topic_labels

@@ -15,6 +15,7 @@
 - [x] TextCNN single-task
 - [x] TextCNN multi-task
 - [x] PhoBERT multi-task
+- [x] PhoBERT keyword-aware multi-task (improved)
 - [x] Demo Streamlit
 - [ ] Báo cáo
 
@@ -253,11 +254,42 @@ So sánh test:
 | TF-IDF | 0.7400 | 0.7247 | 0.7227 |
 | TextCNN single | 0.7621 | 0.7355 | 0.7536 |
 | TextCNN multi | 0.7556 | 0.7390 | 0.7552 |
-| PhoBERT frozen multi | **0.7785** | **0.7428** | **0.7855** |
+| PhoBERT frozen multi | 0.7785 | 0.7428 | 0.7855 |
+| **PhoBERT keyword-aware** | **0.7788** | **0.7633** | **0.8054** |
 
 - Best epoch: 15.
 - Chỉ train head: **17.9 giây** sau khi đã cache embedding.
 - Không fine-tune PhoBERT.
+
+## PhoBERT keyword-aware (improved)
+
+Cải tiến sau khi phân tích lỗi câu:
+
+```text
+"cần phải cải thiện thêm, nhất là giảng viên"
+```
+
+Kết quả:
+
+| Task | Split | Accuracy | Macro-F1 |
+|---|---|---:|---:|
+| sentiment | test | 0.9141 | **0.7788** |
+| topic | test | 0.8696 | **0.7633** |
+| joint | test | 0.8054 | — |
+
+Thay đổi:
+
+- Thêm 12 keyword features cho topic: presence, density, last-3 presence.
+- Thêm keyword auxiliary loss để buộc keyword head học tín hiệu chủ đề.
+- Dùng `sqrt_balanced` class weight thay vì balanced.
+- Sentiment head không nhận keyword features.
+
+Kết quả:
+
+- Topic test tăng **0.0205** so với PhoBERT frozen.
+- Joint test tăng **0.0199**.
+- Câu lỗi cũ giờ dự đoán **lecturer 49.9%** thay vì facility 99%.
+- Demo hiển thị cảnh báo confidence thấp và từ khóa chủ đề phát hiện.
 
 ## Demo Streamlit
 

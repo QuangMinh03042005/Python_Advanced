@@ -98,14 +98,20 @@ def markdown_table(frame: pd.DataFrame, index: bool = False) -> str:
     return "\n".join(lines)
 
 
-def class_weights_for(labels: list[int], num_classes: int, enabled: bool) -> torch.Tensor | None:
-    if not enabled:
+def class_weights_for(
+    labels: list[int],
+    num_classes: int,
+    enabled: bool | str,
+) -> torch.Tensor | None:
+    if enabled is False or enabled == "none":
         return None
     weights = compute_class_weight(
         class_weight="balanced",
         classes=np.arange(num_classes),
         y=np.array(labels),
     )
+    if enabled == "sqrt_balanced":
+        weights = np.sqrt(weights)
     return torch.tensor(weights, dtype=torch.float32)
 
 
