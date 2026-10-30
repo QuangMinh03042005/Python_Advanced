@@ -1,0 +1,61 @@
+{
+  "run_id": "phobert_multitask_20261030_213231",
+  "git_commit": "c1bfe5a",
+  "config": {
+    "seed": 42,
+    "lambda_topic": 1.0,
+    "data": {
+      "tokenized_dir": "data/processed/uit_vsfc_tokenized",
+      "embedding_dir": "data/processed/uit_vsfc_phobert",
+      "model_name": "vinai/phobert-base",
+      "max_len": 128,
+      "embedding_batch_size": 16
+    },
+    "model": {
+      "shared_hidden": 256,
+      "dropout": 0.3
+    },
+    "training": {
+      "batch_size": 64,
+      "epochs": 40,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 6,
+      "max_grad_norm": 1.0,
+      "num_workers": 0,
+      "class_weight": true
+    }
+  },
+  "device": "cpu",
+  "best_epoch": 15,
+  "train_time_sec": 18.39606570000001,
+  "metrics": {
+    "dev": {
+      "sentiment": {
+        "accuracy": 0.9109286165508528,
+        "macro_f1": 0.766518076464204,
+        "weighted_f1": 0.914014815392151
+      },
+      "topic": {
+        "accuracy": 0.8597599494630449,
+        "macro_f1": 0.76725688350773,
+        "weighted_f1": 0.8633926793175882
+      },
+      "joint_accuracy": 0.8003790271636134
+    },
+    "test": {
+      "sentiment": {
+        "accuracy": 0.9039797852179406,
+        "macro_f1": 0.7785205706976391,
+        "weighted_f1": 0.9070225940072457
+      },
+      "topic": {
+        "accuracy": 0.8509159823120657,
+        "macro_f1": 0.7428396653640208,
+        "weighted_f1": 0.8551741833939172
+      },
+      "joint_accuracy": 0.7855337965887556
+    }
+  },
+  "checkpoint": "models/phobert_multitask/phobert_multitask_best.pt"
+}

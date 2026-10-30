@@ -560,6 +560,7 @@ python -m src.train_textcnn --task sentiment
 python -m src.train_textcnn --task topic
 python -m src.train_textcnn_multitask
 python -m src.train_textcnn_multitask --lambda-topic 1.0
+python -m src.train_phobert_multitask
 ```
 
 ### Smoke test
@@ -567,11 +568,12 @@ python -m src.train_textcnn_multitask --lambda-topic 1.0
 ```powershell
 python -m src.train_textcnn --task both --smoke-test --reports-dir .tmp\smoke_reports --models-dir .tmp\smoke_models --runs-dir .tmp\smoke_runs
 python -m src.train_textcnn_multitask --smoke-test --reports-dir .tmp\mt_smoke_reports --models-dir .tmp\mt_smoke_models --runs-dir .tmp\mt_smoke_runs
+python -m src.train_phobert_multitask --smoke-test --reports-dir .tmp\phobert_smoke_reports --models-dir .tmp\phobert_smoke_models --runs-dir .tmp\phobert_smoke_runs
 ```
 
 ### Evaluate
 
-Chưa có script evaluate riêng; `src.train_textcnn` và `src.train_textcnn_multitask` tự đánh giá dev/test và ghi báo cáo.
+Chưa có script evaluate riêng; các script train tự đánh giá dev/test và ghi báo cáo.
 
 ### Predict
 
@@ -637,16 +639,15 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có baseline TF-IDF + Logistic Regression và `reports/baseline_report.md`.
 - [x] Đã có TextCNN single-task và `reports/textcnn_single_report.md`.
 - [x] Đã có TextCNN multi-task và `reports/textcnn_multitask_report.md`.
-- [ ] Chưa có PhoBERT multi-task.
+- [x] Đã có PhoBERT frozen multi-task và `reports/phobert_multitask_report.md`.
 - [ ] Chưa có demo.
 - [ ] Chưa có báo cáo.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Thêm PhoBERT frozen multi-task.
-2. Làm demo Streamlit.
-3. Chạy thí nghiệm 3 seed.
-4. Viết báo cáo.
+1. Làm demo Streamlit.
+2. Chạy thí nghiệm 3 seed.
+3. Viết báo cáo.
 
 ---
 

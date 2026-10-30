@@ -14,7 +14,7 @@
 - [x] Baseline TF-IDF + Logistic Regression
 - [x] TextCNN single-task
 - [x] TextCNN multi-task
-- [ ] PhoBERT multi-task
+- [x] PhoBERT multi-task
 - [ ] Demo Streamlit
 - [ ] Báo cáo
 
@@ -225,6 +225,39 @@ Lambda sweep:
 | 2.0 | 0.7724 | 0.7598 | 0.7496 | 0.7641 |
 
 `lambda = 1.0` được chọn theo **dev mean-F1**, không theo test.
+
+## PhoBERT frozen multi-task
+
+Chạy:
+
+```powershell
+python -m src.train_phobert_multitask
+```
+
+Lần đầu sẽ trích `[CLS]` embedding cho toàn bộ dataset và cache trong `data/processed/uit_vsfc_phobert/`.
+
+Kết quả:
+
+| Task | Split | Accuracy | Macro-F1 |
+|---|---|---:|---:|
+| sentiment | dev | 0.9109 | 0.7665 |
+| sentiment | test | 0.9040 | **0.7785** |
+| topic | dev | 0.8598 | 0.7673 |
+| topic | test | 0.8509 | **0.7428** |
+| joint | test | 0.7855 | — |
+
+So sánh test:
+
+| Model | Sentiment | Topic | Joint |
+|---|---:|---:|---:|
+| TF-IDF | 0.7400 | 0.7247 | 0.7227 |
+| TextCNN single | 0.7621 | 0.7355 | 0.7536 |
+| TextCNN multi | 0.7556 | 0.7390 | 0.7552 |
+| PhoBERT frozen multi | **0.7785** | **0.7428** | **0.7855** |
+
+- Best epoch: 15.
+- Chỉ train head: **17.9 giây** sau khi đã cache embedding.
+- Không fine-tune PhoBERT.
 
 ## Cấu trúc dự kiến
 
