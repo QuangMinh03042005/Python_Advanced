@@ -16,6 +16,7 @@
 - [x] TextCNN multi-task
 - [x] PhoBERT multi-task
 - [x] PhoBERT keyword-aware multi-task (improved)
+- [x] 3-seed evaluation
 - [x] Demo Streamlit
 - [ ] Báo cáo
 
@@ -290,6 +291,26 @@ Kết quả:
 - Joint test tăng **0.0199**.
 - Câu lỗi cũ giờ dự đoán **lecturer 49.9%** thay vì facility 99%.
 - Demo hiển thị cảnh báo confidence thấp và từ khóa chủ đề phát hiện.
+
+## 3-seed evaluation
+
+Seeds: **42, 123, 2024**. Mỗi seed train lại từ đầu; test chỉ đánh giá một lần.
+
+Test mean ± std:
+
+| Model | Sentiment F1 | Topic F1 | Joint accuracy |
+|---|---:|---:|---:|
+| TextCNN multi | 0.7559 ± 0.0024 | 0.7508 ± 0.0103 | 0.7654 ± 0.0090 |
+| PhoBERT frozen multi | 0.7679 ± 0.0101 | 0.7388 ± 0.0082 | 0.7612 ± 0.0291 |
+| **PhoBERT keyword-aware** | **0.7760 ± 0.0060** | **0.7597 ± 0.0067** | **0.7989 ± 0.0059** |
+
+Kết luận:
+
+- PhoBERT keyword-aware tốt nhất cả 3 metric trung bình.
+- Phương sai thấp hơn PhoBERT frozen, đặc biệt ở joint accuracy.
+- Kết quả 3 seed xác nhận cải thiện không phải may mắn từ một seed.
+
+Chi tiết: [reports/seed_summary.md](reports/seed_summary.md).
 
 ## Demo Streamlit
 

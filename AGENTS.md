@@ -645,12 +645,13 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có PhoBERT frozen multi-task và `reports/phobert_multitask_report.md`.
 - [x] Đã có PhoBERT keyword-aware multi-task và `reports/phobert_keyword_multitask_report.md`.
 - [x] Đã có demo Streamlit và `src.predict`.
+- [x] Đã có 3-seed evaluation và `reports/seed_summary.md`.
 - [ ] Chưa có báo cáo.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Chạy thí nghiệm 3 seed.
-2. Viết báo cáo.
+1. Viết báo cáo tổng hợp.
+2. Làm slide và video demo.
 
 ---
 
