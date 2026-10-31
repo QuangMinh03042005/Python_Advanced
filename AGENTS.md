@@ -647,12 +647,16 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có demo Streamlit và `src.predict`.
 - [x] Đã có 3-seed evaluation và `reports/seed_summary.md`.
 - [x] Đã có McNemar + bootstrap và `reports/statistical_tests.md`.
+- [x] Đã trích teacher soft labels cho distillation.
+- [ ] Chưa có student distillation.
 - [ ] Chưa có báo cáo.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Viết báo cáo tổng hợp.
-2. Làm slide và video demo.
+1. Cài đặt student distillation PhoBERT → TextCNN.
+2. Chạy 3 seed cho student.
+3. Calibration + robustness.
+4. Viết báo cáo tổng hợp.
 
 ---
 

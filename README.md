@@ -337,6 +337,37 @@ Diễn giải:
 
 Chi tiết: [reports/statistical_tests.md](reports/statistical_tests.md).
 
+## Teacher soft labels (distillation)
+
+Đã trích soft label từ PhoBERT keyword-aware cho cả 3 split:
+
+```powershell
+python -m src.data.teacher_logits
+```
+
+Output:
+
+```text
+data/processed/teacher_soft_labels/
+├── train_sentiment_probs.npy
+├── train_topic_probs.npy
+├── dev_*.npy
+├── test_*.npy
+└── metadata.json
+```
+
+Kết quả kiểm tra:
+
+| Split | Rows | Sent F1 | Topic F1 |
+|---|---:|---:|---:|
+| train | 11.426 | 0.9204 | 0.8557 |
+| dev | 1.583 | 0.7899 | 0.7697 |
+| test | 3.166 | 0.7788 | 0.7633 |
+
+- Extraction time CPU: khoảng **515 giây**.
+- Xác suất đã kiểm tra tổng = 1.
+- Báo cáo: [reports/teacher_soft_labels.md](reports/teacher_soft_labels.md).
+
 ## Demo Streamlit
 
 Chạy:
