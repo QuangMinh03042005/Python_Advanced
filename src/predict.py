@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any
 
@@ -37,6 +38,8 @@ class PhoBERTMultiTaskPredictor:
         self,
         checkpoint_path: str | Path = DEFAULT_CHECKPOINT_PATH,
         device: str | torch.device | None = None,
+        sentiment_temperature: float = 1.0,
+        topic_temperature: float = 1.0,
     ) -> None:
         checkpoint_path = Path(checkpoint_path)
         if not checkpoint_path.exists():
@@ -57,6 +60,14 @@ class PhoBERTMultiTaskPredictor:
         self.embedding_model = str(checkpoint["embedding_model"])
         self.model_type = str(checkpoint.get("model_type", "standard"))
         self.keyword_aware = self.model_type == "keyword_aware"
+        self.sentiment_temperature = float(sentiment_temperature)
+        self.topic_temperature = float(topic_temperature)
+        self.parameter_count = 0
+        self.model_name = (
+            "PhoBERT keyword-aware teacher"
+            if self.keyword_aware
+            else "PhoBERT teacher"
+        )
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.embedding_model)
         self.encoder = AutoModel.from_pretrained(self.embedding_model).to(self.device)
@@ -81,9 +92,13 @@ class PhoBERTMultiTaskPredictor:
             ).to(self.device)
         self.head.load_state_dict(checkpoint["model_state"])
         self.head.eval()
+        self.parameter_count = sum(
+            parameter.numel() for parameter in self.encoder.parameters()
+        ) + sum(parameter.numel() for parameter in self.head.parameters())
 
     @torch.no_grad()
     def predict(self, text: str) -> dict[str, Any]:
+        start = time.perf_counter()
         tokens = tokenize_text(text)
         if not tokens:
             raise ValueError("Câu đầu vào rỗng")
@@ -109,8 +124,14 @@ class PhoBERTMultiTaskPredictor:
         else:
             sentiment_logits, topic_logits = self.head(cls_embedding)
 
-        sentiment_probs = torch.softmax(sentiment_logits, dim=1)[0]
-        topic_probs = torch.softmax(topic_logits, dim=1)[0]
+        sentiment_probs = torch.softmax(
+            sentiment_logits / self.sentiment_temperature,
+            dim=1,
+        )[0]
+        topic_probs = torch.softmax(
+            topic_logits / self.topic_temperature,
+            dim=1,
+        )[0]
 
         sentiment_values = {
             label: float(probability)
@@ -123,22 +144,28 @@ class PhoBERTMultiTaskPredictor:
 
         sentiment_sorted = sorted(sentiment_values.items(), key=lambda item: item[1], reverse=True)
         topic_sorted = sorted(topic_values.items(), key=lambda item: item[1], reverse=True)
+        latency_ms = (time.perf_counter() - start) * 1000
 
         return {
             "text": text,
             "tokens": tokens,
             "topic_keywords": keyword_hits(tokens),
+            "model_name": self.model_name,
+            "parameter_count": self.parameter_count,
+            "latency_ms": latency_ms,
             "sentiment": {
                 "label": sentiment_sorted[0][0],
                 "confidence": sentiment_sorted[0][1],
                 "margin": sentiment_sorted[0][1] - sentiment_sorted[1][1],
                 "probabilities": sentiment_values,
+                "temperature": self.sentiment_temperature,
             },
             "topic": {
                 "label": topic_sorted[0][0],
                 "confidence": topic_sorted[0][1],
                 "margin": topic_sorted[0][1] - topic_sorted[1][1],
                 "probabilities": topic_values,
+                "temperature": self.topic_temperature,
             },
         }
 
@@ -148,9 +175,16 @@ def main() -> None:
     parser.add_argument("--text", required=True)
     parser.add_argument("--checkpoint", type=Path, default=DEFAULT_CHECKPOINT_PATH)
     parser.add_argument("--device", default=None)
+    parser.add_argument("--sentiment-temperature", type=float, default=1.0)
+    parser.add_argument("--topic-temperature", type=float, default=1.0)
     args = parser.parse_args()
 
-    predictor = PhoBERTMultiTaskPredictor(args.checkpoint, device=args.device)
+    predictor = PhoBERTMultiTaskPredictor(
+        args.checkpoint,
+        device=args.device,
+        sentiment_temperature=args.sentiment_temperature,
+        topic_temperature=args.topic_temperature,
+    )
     result = predictor.predict(args.text)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

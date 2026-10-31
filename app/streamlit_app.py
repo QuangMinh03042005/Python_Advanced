@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 from typing import Any
@@ -11,7 +12,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.predict import DEFAULT_CHECKPOINT_PATH, PhoBERTMultiTaskPredictor  # noqa: E402
+from src import predict as teacher_module  # noqa: E402
+from src import predict_textcnn as student_module  # noqa: E402
+
+TEACHER_CHECKPOINT_PATH = teacher_module.DEFAULT_CHECKPOINT_PATH
+STUDENT_CHECKPOINT_PATH = student_module.DEFAULT_CHECKPOINT_PATH
+TEACHER_LABEL = "PhoBERT teacher"
+STUDENT_LABEL = "TextCNN student"
+CALIBRATION_PATH = PROJECT_ROOT / "reports" / "calibration_temperatures.json"
+BENCHMARK_PATH = PROJECT_ROOT / "reports" / "distillation_benchmark.json"
 
 SENTIMENT_VN = {
     "negative": "Tiêu cực",
@@ -38,16 +47,84 @@ st.set_page_config(
 )
 
 
-@st.cache_resource(show_spinner="Đang tải PhoBERT và checkpoint...")
-def load_predictor() -> PhoBERTMultiTaskPredictor:
-    return PhoBERTMultiTaskPredictor(DEFAULT_CHECKPOINT_PATH)
+@st.cache_data
+def load_temperatures() -> dict[str, dict[str, float]]:
+    defaults = {
+        "teacher": {"sentiment": 1.0, "topic": 1.0},
+        "student": {"sentiment": 1.0, "topic": 1.0},
+    }
+    if not CALIBRATION_PATH.exists():
+        return defaults
+    payload = json.loads(CALIBRATION_PATH.read_text(encoding="utf-8"))
+    temperatures = payload.get("temperatures", {})
+    return {
+        model: {
+            "sentiment": float(temperatures.get(model, {}).get("sentiment", 1.0)),
+            "topic": float(temperatures.get(model, {}).get("topic", 1.0)),
+        }
+        for model in ("teacher", "student")
+    }
 
+
+@st.cache_resource(show_spinner="Đang tải PhoBERT teacher...")
+def load_teacher(
+    sentiment_temperature: float,
+    topic_temperature: float,
+) -> teacher_module.PhoBERTMultiTaskPredictor:
+    predictor = teacher_module.PhoBERTMultiTaskPredictor(
+        TEACHER_CHECKPOINT_PATH,
+        sentiment_temperature=sentiment_temperature,
+        topic_temperature=topic_temperature,
+    )
+    predictor.predict("câu khởi động")
+    return predictor
+
+
+@st.cache_resource(show_spinner="Đang tải TextCNN student...")
+def load_student(
+    sentiment_temperature: float,
+    topic_temperature: float,
+) -> student_module.TextCNNMultiTaskPredictor:
+    predictor = student_module.TextCNNMultiTaskPredictor(
+        STUDENT_CHECKPOINT_PATH,
+        sentiment_temperature=sentiment_temperature,
+        topic_temperature=topic_temperature,
+    )
+    predictor.predict("câu khởi động")
+    return predictor
+
+
+temperatures = load_temperatures()
+
+with st.sidebar:
+    st.header("Mô hình")
+    selected_model = st.selectbox(
+        "Chọn mô hình",
+        [TEACHER_LABEL, STUDENT_LABEL],
+        index=0,
+    )
+
+if selected_model == TEACHER_LABEL:
+    model_key = "teacher"
+    load_selected = load_teacher
+elif selected_model == STUDENT_LABEL:
+    model_key = "student"
+    load_selected = load_student
+else:
+    st.error("Mô hình không hợp lệ.")
+    st.stop()
 
 try:
-    predictor = load_predictor()
+    predictor = load_selected(
+        temperatures[model_key]["sentiment"],
+        temperatures[model_key]["topic"],
+    )
 except Exception as exc:  # pragma: no cover - UI guard
     st.error(f"Không tải được mô hình: {exc}")
-    st.info("Hãy chắc chắn đã chạy `python -m src.train_phobert_multitask` trước.")
+    if model_key == "student":
+        st.info("Hãy chạy `python -m src.train_textcnn_distill` để tạo checkpoint student.")
+    else:
+        st.info("Hãy chạy `python -m src.train_phobert_keyword_multitask` trước.")
     st.stop()
 
 
@@ -107,21 +184,29 @@ def render_prediction(result: dict[str, Any]) -> None:
         st.info(f"Gợi ý (rule-based): {suggestion}")
 
     st.caption(
-        "Confidence là xác suất softmax, chưa được calibration. "
+        f"{result.get('model_name', 'Mô hình')} · "
+        f"{result.get('parameter_count', 0):,} tham số · "
+        f"{result.get('latency_ms', 0.0):.2f} ms/câu"
+    )
+    st.caption(
+        "Confidence đã calibration bằng temperature scaling trên dev. "
         "Không dùng kết quả này thay cho đánh giá của con người."
     )
 
 
 st.title("💬 Phân tích phản hồi sinh viên")
-st.caption("PhoBERT keyword-aware multi-task — dự đoán cảm xúc và chủ đề từ một câu tiếng Việt.")
+st.caption("So sánh PhoBERT teacher và TextCNN student — dự đoán cảm xúc và chủ đề từ một câu tiếng Việt.")
 
 with st.sidebar:
-    st.header("Mô hình")
-    st.write("**PhoBERT keyword-aware multi-task**")
-    st.write("Encoder: `vinai/phobert-base`")
+    st.write(f"**{predictor.model_name}**")
     st.write(f"Device: `{predictor.device}`")
     st.write(f"Max length: `{predictor.max_len}`")
-    st.write("Keyword features: 12")
+    st.write(f"Parameters: `{predictor.parameter_count:,}`")
+    st.write(
+        "Calibration: "
+        f"`T_sent={predictor.sentiment_temperature:.3f}`, "
+        f"`T_topic={predictor.topic_temperature:.3f}`"
+    )
     st.divider()
     st.caption(
         "Demo chỉ dùng cho mục đích học tập. "
@@ -205,6 +290,30 @@ with tab_compare:
                 width="stretch",
             )
 
+    st.subheader("Teacher vs Student trên CPU")
+    if not BENCHMARK_PATH.exists():
+        st.info("Chưa có `reports/distillation_benchmark.json`.")
+    else:
+        benchmark = json.loads(BENCHMARK_PATH.read_text(encoding="utf-8"))
+        teacher = benchmark["teacher"]
+        student = benchmark["student"]
+        col1, col2, col3 = st.columns(3)
+        col1.metric(
+            "Teacher latency",
+            f"{teacher['ms_per_sentence']:.2f} ms",
+            f"{teacher['parameter_count']:,} tham số",
+        )
+        col2.metric(
+            "Student latency",
+            f"{student['ms_per_sentence']:.2f} ms",
+            f"{student['parameter_count']:,} tham số",
+        )
+        col3.metric("Speedup", f"{benchmark['speedup']:.1f}×")
+        st.caption(
+            f"Đo trên {benchmark['n_sentences']} câu test, device "
+            f"`{benchmark['device']}`."
+        )
+
 with tab_about:
     st.subheader("Bài toán")
     st.write(
@@ -216,14 +325,18 @@ with tab_about:
     st.write("UIT-VSFC — khoảng 16.000 câu phản hồi sinh viên tiếng Việt.")
     st.subheader("Mô hình")
     st.write(
-        "PhoBERT được đóng băng; embedding `[CLS]` được trích một lần."
-        " Topic head dùng thêm 12 keyword features và một keyword auxiliary loss"
-        " để giảm lỗi shortcut theo cụm từ."
+        "**Teacher:** PhoBERT keyword-aware multi-task."
+        " **Student:** TextCNN multi-task được distillation từ teacher."
+        " Student nhỏ hơn ~332 lần và nhanh hơn ~26 lần trên CPU."
+    )
+    st.write(
+        "Confidence được calibration bằng temperature scaling trên dev."
+        " Calibration không làm thay đổi nhãn dự đoán, chỉ sửa độ tin cậy."
     )
     st.subheader("Hạn chế")
     st.write(
-        "- Confidence chưa calibration.\n"
         "- Có thể sai với mỉa mai, teencode, câu quá dài.\n"
+        "- Mất dấu là lỗi nghiêm trọng nhất với cả teacher và student.\n"
         "- Chủ đề là nhãn mức câu, không phải cảm xúc theo từng khía cạnh.\n"
         "- Không dùng để đánh giá cá nhân giảng viên."
     )
