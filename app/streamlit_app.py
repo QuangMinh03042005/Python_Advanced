@@ -135,6 +135,43 @@ def render_probabilities(title: str, probabilities: dict[str, float], labels_vn:
         st.progress(value, text=f"{labels_vn[label]}: {value:.1%}")
 
 
+def top_topics(probabilities: dict[str, float], limit: int = 2) -> list[tuple[str, float]]:
+    return sorted(probabilities.items(), key=lambda item: item[1], reverse=True)[:limit]
+
+
+def mentioned_topic_labels(topic_keywords: dict[str, list[str]]) -> list[str]:
+    return [
+        TOPIC_VN[topic]
+        for topic, words in topic_keywords.items()
+        if words
+    ]
+
+
+def render_top_topics(probabilities: dict[str, float]) -> None:
+    top = top_topics(probabilities)
+    summary = " · ".join(
+        f"{TOPIC_VN[label]} {probability:.1%}"
+        for label, probability in top
+    )
+    st.caption(f"Top-2 chủ đề: {summary}")
+
+
+def render_multi_topic_warning(result: dict[str, Any]) -> None:
+    mentioned = mentioned_topic_labels(result.get("topic_keywords", {}))
+    if len(mentioned) < 2:
+        return
+    st.warning(
+        "Câu này nhắc đến nhiều chủ đề: "
+        + ", ".join(mentioned)
+        + ". Mô hình hiện là single-label nên chỉ chọn chủ đề trội; "
+        "các xác suất bên dưới không phải xác suất độc lập của từng chủ đề."
+    )
+    top = top_topics(result["topic"]["probabilities"])
+    columns = st.columns(len(top))
+    for column, (label, probability) in zip(columns, top, strict=True):
+        column.metric(f"Top {TOPIC_VN[label]}", f"{probability:.1%}")
+
+
 def suggestion_for(sentiment: str, topic: str) -> str | None:
     if sentiment != "negative":
         return None
@@ -164,8 +201,11 @@ def render_prediction(result: dict[str, Any]) -> None:
     if topic["confidence"] < 0.5 or topic["margin"] < 0.1:
         st.warning("Mô hình chưa chắc chắn về chủ đề. Hãy xem xác suất chi tiết.")
 
+    render_multi_topic_warning(result)
+
     render_probabilities("Xác suất cảm xúc", sentiment["probabilities"], SENTIMENT_VN)
     render_probabilities("Xác suất chủ đề", topic["probabilities"], TOPIC_VN)
+    render_top_topics(topic["probabilities"])
 
     with st.expander("Token sau tách từ"):
         st.code(" | ".join(result["tokens"]))

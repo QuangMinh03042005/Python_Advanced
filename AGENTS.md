@@ -652,6 +652,7 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có calibration và `reports/calibration_report.md`.
 - [x] Đã có robustness và `reports/robustness_report.md`.
 - [x] Đã có demo model selector teacher/student + calibrated confidence.
+- [x] Đã có cảnh báo multi-topic + top-2 trong demo.
 - [ ] Chưa có báo cáo tổng hợp.
 
 ### Thứ tự ưu tiên tiếp theo

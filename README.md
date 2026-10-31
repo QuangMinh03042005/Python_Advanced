@@ -473,6 +473,7 @@ Demo gồm:
 - Hiển thị confidence đã calibration, xác suất từng lớp, latency và số tham số.
 - Cảnh báo khi confidence thấp.
 - Hiển thị token sau tách từ và keyword chủ đề.
+- Cảnh báo khi câu nhắc đến nhiều chủ đề và hiển thị top-2 chủ đề.
 - Tab so sánh kết quả test và benchmark CPU teacher/student.
 - Tab giới thiệu và hạn chế.
 
