@@ -9,10 +9,12 @@ import pandas as pd
 from scipy.stats import binomtest
 from sklearn.metrics import f1_score
 
+from src.report_paths import EVALUATION_DIR
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SEEDS = (42, 123, 2024)
-DEFAULT_OUTPUT = PROJECT_ROOT / "reports" / "statistical_tests.csv"
-DEFAULT_REPORT = PROJECT_ROOT / "reports" / "statistical_tests.md"
+DEFAULT_OUTPUT = EVALUATION_DIR / "statistical_tests.csv"
+DEFAULT_REPORT = EVALUATION_DIR / "statistical_tests.md"
 
 
 def find_latest_predictions(root: Path) -> Path:

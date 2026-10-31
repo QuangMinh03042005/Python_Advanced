@@ -33,7 +33,7 @@ python scripts\download_uit_vsfc.py --check
 - `data/processed/` dành cho dữ liệu do script tạo ra.
 - Không commit dữ liệu thô hoặc dữ liệu đã xử lý.
 - Label mapping nằm trong `configs/label_map.json`.
-- Kiểm tra tổng quan nằm trong `reports/data_summary.md`.
+- Kiểm tra tổng quan nằm trong `reports/data/data_summary.md`.
 
 ## Giấy phép
 

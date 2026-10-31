@@ -23,6 +23,7 @@ from src.data.preprocess import tokenize_text
 from src.data.teacher_logits import load_teacher
 from src.features.keywords import extract_topic_keyword_features
 from src.models.textcnn import TextCNNMultiTask
+from src.report_paths import EVALUATION_DIR
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TEACHER_CHECKPOINT = (
@@ -35,7 +36,7 @@ DEFAULT_STUDENT_CHECKPOINT = (
     PROJECT_ROOT / "models" / "textcnn_distilled" / "textcnn_distilled_best.pt"
 )
 DEFAULT_TEST_CSV = PROJECT_ROOT / "data" / "processed" / "uit_vsfc_tokenized" / "test.csv"
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = EVALUATION_DIR
 VARIANTS = ("clean", "no_diacritics", "teencode", "typo", "emoji", "shuffle")
 
 TEENCODE_REPLACEMENTS = (
@@ -303,6 +304,8 @@ def main() -> None:
         print(f"done {variant}")
 
     results = pd.DataFrame(rows)
+    args.reports_dir.mkdir(parents=True, exist_ok=True)
+    (args.reports_dir / "figures").mkdir(parents=True, exist_ok=True)
     clean = results[results["variant"] == "clean"].set_index("model")
     for metric in ("sentiment_f1", "topic_f1", "joint_accuracy"):
         results[f"delta_{metric}"] = results.apply(
@@ -341,7 +344,7 @@ def main() -> None:
         "",
         "## Figures",
         "",
-        "- `reports/figures/robustness_scores.png`",
+        "- `reports/evaluation/figures/robustness_scores.png`",
         "",
         "## Nhận xét",
         "",

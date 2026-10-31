@@ -237,9 +237,9 @@ models/textcnn_distilled/...
 Sản phẩm:
 
 ```text
-reports/finetune_report.md
-reports/robustness.md
-reports/calibration.md
+reports/phobert/finetuned/report.md
+reports/evaluation/robustness_report.md
+reports/evaluation/calibration_report.md
 ```
 
 ### Tuần 3 — Demo + báo cáo

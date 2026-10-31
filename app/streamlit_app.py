@@ -19,8 +19,8 @@ TEACHER_CHECKPOINT_PATH = teacher_module.DEFAULT_CHECKPOINT_PATH
 STUDENT_CHECKPOINT_PATH = student_module.DEFAULT_CHECKPOINT_PATH
 TEACHER_LABEL = "PhoBERT teacher"
 STUDENT_LABEL = "TextCNN student"
-CALIBRATION_PATH = PROJECT_ROOT / "reports" / "calibration_temperatures.json"
-BENCHMARK_PATH = PROJECT_ROOT / "reports" / "distillation_benchmark.json"
+CALIBRATION_PATH = PROJECT_ROOT / "reports" / "evaluation" / "calibration_temperatures.json"
+BENCHMARK_PATH = PROJECT_ROOT / "reports" / "distillation" / "distillation_benchmark.json"
 
 SENTIMENT_VN = {
     "negative": "Tiêu cực",
@@ -332,7 +332,7 @@ with tab_compare:
 
     st.subheader("Teacher vs Student trên CPU")
     if not BENCHMARK_PATH.exists():
-        st.info("Chưa có `reports/distillation_benchmark.json`.")
+        st.info("Chưa có `reports/distillation/distillation_benchmark.json`.")
     else:
         benchmark = json.loads(BENCHMARK_PATH.read_text(encoding="utf-8"))
         teacher = benchmark["teacher"]

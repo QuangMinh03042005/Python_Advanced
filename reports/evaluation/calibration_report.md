@@ -15,8 +15,8 @@
 
 ## Figures
 
-- `reports/figures/calibration_sentiment_reliability.png`
-- `reports/figures/calibration_topic_reliability.png`
+- `reports/evaluation/figures/calibration_sentiment_reliability.png`
+- `reports/evaluation/figures/calibration_topic_reliability.png`
 
 ## Nhận xét
 

@@ -14,13 +14,14 @@ from src.data.dataset import Vocab
 from src.data.preprocess import tokenize_text
 from src.models.textcnn import TextCNNMultiTask
 from src.predict import DEFAULT_CHECKPOINT_PATH, PhoBERTMultiTaskPredictor
+from src.report_paths import DISTILLATION_DIR
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STUDENT_CHECKPOINT = (
     PROJECT_ROOT / "models" / "textcnn_distilled" / "textcnn_distilled_best.pt"
 )
 DEFAULT_TEST_CSV = PROJECT_ROOT / "data" / "processed" / "uit_vsfc_tokenized" / "test.csv"
-DEFAULT_OUTPUT = PROJECT_ROOT / "reports" / "distillation_benchmark.json"
+DEFAULT_OUTPUT = DISTILLATION_DIR / "distillation_benchmark.json"
 
 
 def load_student(checkpoint_path: Path) -> dict[str, Any]:

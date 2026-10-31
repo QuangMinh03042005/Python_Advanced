@@ -12,9 +12,10 @@ import pandas as pd
 import seaborn as sns
 
 from src.data.load import DEFAULT_DATA_DIR, SPLITS, LabelMap, load_label_map, load_splits
+from src.report_paths import DATA_DIR
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = DATA_DIR
 DEFAULT_FIGURES_DIR = DEFAULT_REPORTS_DIR / "figures"
 
 SENTIMENT_ORDER = ["negative", "neutral", "positive"]

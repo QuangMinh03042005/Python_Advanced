@@ -24,7 +24,7 @@
 
 ## Figures
 
-- `reports/figures/robustness_scores.png`
+- `reports/evaluation/figures/robustness_scores.png`
 
 ## Nhận xét
 

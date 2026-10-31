@@ -30,6 +30,7 @@ from src.metrics import (
     plot_confusion_matrix,
 )
 from src.models.textcnn import TextCNNMultiTask
+from src.report_paths import TEXTCNN_DISTILL_DIR, resolve_results_path
 from src.train_textcnn_multitask import (
     class_weights_for,
     display_path,
@@ -43,7 +44,7 @@ from src.train_textcnn_multitask import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "textcnn_distill.yaml"
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = TEXTCNN_DISTILL_DIR
 DEFAULT_MODELS_DIR = PROJECT_ROOT / "models" / "textcnn_distilled"
 DEFAULT_RUNS_DIR = PROJECT_ROOT / "runs"
 
@@ -269,8 +270,7 @@ def plot_learning_curve(history: pd.DataFrame, path: Path) -> None:
     plt.close(fig)
 
 
-def comparison_table(reports_dir: Path) -> pd.DataFrame:
-    results_path = reports_dir / "results.csv"
+def comparison_table(results_path: Path) -> pd.DataFrame:
     if not results_path.exists():
         return pd.DataFrame()
     results = pd.read_csv(results_path)
@@ -695,7 +695,7 @@ def run(
             }
         )
 
-    results_path = reports_dir / "results.csv"
+    results_path = resolve_results_path(reports_dir)
     if results_path.exists():
         existing = pd.read_csv(results_path)
         existing = existing[existing["model"] != "textcnn_distilled"]
@@ -738,7 +738,7 @@ def run(
         parameter_count=parameter_count,
         model_size_mb=model_size_mb,
         reports_dir=reports_dir,
-        comparison=comparison_table(reports_dir),
+        comparison=comparison_table(results_path),
     )
 
     return {

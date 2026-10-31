@@ -33,10 +33,11 @@ from src.metrics import (
     plot_confusion_matrix,
 )
 from src.models.textcnn import TextCNN
+from src.report_paths import TEXTCNN_SINGLE_DIR, resolve_results_path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "textcnn.yaml"
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = TEXTCNN_SINGLE_DIR
 DEFAULT_MODELS_DIR = PROJECT_ROOT / "models" / "textcnn"
 DEFAULT_RUNS_DIR = PROJECT_ROOT / "runs"
 
@@ -701,7 +702,7 @@ def run(
                 source.reset_index(drop=True),
             )
 
-    results_path = reports_dir / "results.csv"
+    results_path = resolve_results_path(reports_dir)
     new_rows = build_results_rows(
         run_id=run_id,
         config=config,

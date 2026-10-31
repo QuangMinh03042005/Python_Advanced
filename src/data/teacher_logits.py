@@ -24,6 +24,7 @@ from src.models.phobert_multitask import (  # noqa: E402
     KeywordAwarePhoBERTMultiTask,
     PhoBERTMultiTaskHead,
 )
+from src.report_paths import DISTILLATION_DIR  # noqa: E402
 
 DEFAULT_CHECKPOINT = (
     PROJECT_ROOT
@@ -283,7 +284,7 @@ def main() -> None:
         "```",
         "",
     ]
-    (PROJECT_ROOT / "reports" / "teacher_soft_labels.md").write_text(
+    (DISTILLATION_DIR / "teacher_soft_labels.md").write_text(
         "\n".join(lines),
         encoding="utf-8",
     )

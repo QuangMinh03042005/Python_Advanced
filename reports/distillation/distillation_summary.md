@@ -46,8 +46,8 @@ Student gần như ngang teacher ở topic, thấp hơn ở sentiment/joint, nh�
 |---|---:|---:|---:|
 | Parameters | 135.198.571 | 407.055 | **332× ít hơn** |
 | Estimated size | 515.74 MB | 1.55 MB | **332× nhỏ hơn** |
-| Latency | 51.14 ms/câu | 1.98 ms/câu | **25.9× nhanh hơn** |
-| Throughput | 19.6 câu/s | 505.9 câu/s | **25.9×** |
+| Latency | 63.68 ms/câu | 2.30 ms/câu | **27.6× nhanh hơn** |
+| Throughput | 15.7 câu/s | 433.9 câu/s | **27.6×** |
 
 Lưu ý: checkpoint teacher trong repo chỉ chứa head; kích thước teacher ở bảng trên là ước lượng từ số tham số của encoder + head.
 
@@ -62,15 +62,15 @@ Lưu ý: checkpoint teacher trong repo chỉ chứa head; kích thước teacher
 ## Kết luận
 
 - Distillation thành công về mục tiêu **nén mô hình**.
-- Student nhỏ hơn ~332 lần, nhanh hơn ~26 lần trên CPU.
+- Student nhỏ hơn ~332 lần, nhanh hơn ~28 lần trên CPU.
 - F1 giảm không nhiều so với teacher; topic gần như tương đương.
 - Student tốt hơn TextCNN hard-label trên cả 3 metric trung bình.
 - Đây là trade-off hợp lý cho triển khai CPU.
 
 ## File
 
-- [reports/textcnn_distill_report.md](textcnn_distill_report.md)
+- [reports/textcnn/distilled/textcnn_distill_report.md](../textcnn/distilled/textcnn_distill_report.md)
 - [reports/distill_seed_results.csv](distill_seed_results.csv)
 - [reports/distillation_benchmark.json](distillation_benchmark.json)
-- [src/train_textcnn_distill.py](../src/train_textcnn_distill.py)
-- [src/benchmark_distill.py](../src/benchmark_distill.py)
+- [src/train_textcnn_distill.py](../../src/train_textcnn_distill.py)
+- [src/benchmark_distill.py](../../src/benchmark_distill.py)

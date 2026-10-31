@@ -105,7 +105,7 @@ test: 3166 rows
 total: 16175 rows
 ```
 
-Label mapping nằm trong `configs/label_map.json`. Báo cáo kiểm tra dữ liệu nằm trong `reports/data_summary.md`.
+Label mapping nằm trong `configs/label_map.json`. Báo cáo kiểm tra dữ liệu nằm trong `reports/data/data_summary.md`.
 
 ## EDA
 
@@ -118,12 +118,12 @@ python -m src.data.eda
 Output:
 
 ```text
-reports/eda_summary.md
-reports/eda_sentiment_distribution.csv
-reports/eda_topic_distribution.csv
-reports/eda_sentiment_topic_crosstab.csv
-reports/eda_length_stats.csv
-reports/figures/
+reports/data/eda_summary.md
+reports/data/eda_sentiment_distribution.csv
+reports/data/eda_topic_distribution.csv
+reports/data/eda_sentiment_topic_crosstab.csv
+reports/data/eda_length_stats.csv
+reports/data/figures/
 ```
 
 Kết quả chính:
@@ -146,11 +146,11 @@ python -m src.models.baseline
 Output:
 
 ```text
-reports/baseline_report.md
-reports/baseline_metrics.json
+reports/baselines/tfidf/baseline_report.md
+reports/baselines/tfidf/baseline_metrics.json
 reports/results.csv
-reports/baseline_*_per_class.csv
-reports/figures/baseline_*_confusion.png
+reports/baselines/tfidf/baseline_*_per_class.csv
+reports/baselines/tfidf/figures/baseline_*_confusion.png
 ```
 
 Kết quả hiện tại:
@@ -313,7 +313,7 @@ Kết luận:
 - Phương sai thấp hơn PhoBERT frozen, đặc biệt ở joint accuracy.
 - Kết quả 3 seed xác nhận cải thiện không phải may mắn từ một seed.
 
-Chi tiết: [reports/seed_summary.md](reports/seed_summary.md).
+Chi tiết: [reports/evaluation/seed_summary.md](reports/evaluation/seed_summary.md).
 
 ## Kiểm định thống kê
 
@@ -338,7 +338,7 @@ Diễn giải:
 - Chưa đủ bằng chứng để khẳng định cải thiện sentiment F1.
 - So với TextCNN, lợi thế topic không ổn định qua 3 seed.
 
-Chi tiết: [reports/statistical_tests.md](reports/statistical_tests.md).
+Chi tiết: [reports/evaluation/statistical_tests.md](reports/evaluation/statistical_tests.md).
 
 ## Teacher soft labels (distillation)
 
@@ -369,7 +369,7 @@ Kết quả kiểm tra:
 
 - Extraction time CPU: khoảng **515 giây**.
 - Xác suất đã kiểm tra tổng = 1.
-- Báo cáo: [reports/teacher_soft_labels.md](reports/teacher_soft_labels.md).
+- Báo cáo: [reports/distillation/teacher_soft_labels.md](reports/distillation/teacher_soft_labels.md).
 
 ## TextCNN student distillation
 
@@ -391,8 +391,8 @@ Hiệu năng CPU:
 
 - Student: **407.055** tham số, ~**1.55 MB**.
 - Teacher: **135.198.571** tham số, ~**515.74 MB**.
-- Latency: **1.98 ms/câu** vs **51.14 ms/câu**.
-- Nhanh hơn **25.9×**, nhỏ hơn **332×**.
+- Latency: **2.30 ms/câu** vs **63.68 ms/câu**.
+- Nhanh hơn **27.6×**, nhỏ hơn **332×**.
 
 Kết luận:
 
@@ -400,7 +400,7 @@ Kết luận:
 - Student gần ngang teacher ở topic, thấp hơn ở sentiment/joint.
 - Đây là trade-off hợp lý cho triển khai CPU.
 
-Chi tiết: [reports/distillation_summary.md](reports/distillation_summary.md).
+Chi tiết: [reports/distillation/distillation_summary.md](reports/distillation/distillation_summary.md).
 
 ## Calibration
 
@@ -417,7 +417,7 @@ Temperature scaling fit trên dev, đánh giá trên test:
 - Sau calibration, ECE của student giảm mạnh.
 - Accuracy không đổi vì temperature chỉ sửa confidence.
 
-Chi tiết: [reports/calibration_report.md](reports/calibration_report.md).
+Chi tiết: [reports/evaluation/calibration_report.md](reports/evaluation/calibration_report.md).
 
 ## Robustness
 
@@ -438,7 +438,7 @@ Kết luận:
 - Teacher nhạy với emoji và đảo trật tự từ hơn student.
 - Student bền vững hơn với emoji/shuffle nhưng yếu hơn ở clean.
 
-Chi tiết: [reports/robustness_report.md](reports/robustness_report.md).
+Chi tiết: [reports/evaluation/robustness_report.md](reports/evaluation/robustness_report.md).
 
 ## Demo Streamlit
 
@@ -485,6 +485,8 @@ python -m src.predict_textcnn --text "Cơ sở vật chất còn yếu, phòng h
 ```
 
 ## Cấu trúc dự kiến
+
+Xem index báo cáo tại [reports/README.md](reports/README.md).
 
 ```text
 configs/        # YAML hyperparameters

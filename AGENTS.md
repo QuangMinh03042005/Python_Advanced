@@ -152,8 +152,15 @@ project/
 ├── models/
 ├── runs/
 ├── reports/
-│   ├── figures/
-│   └── results.csv
+│   ├── README.md
+│   ├── results.csv
+│   ├── data/
+│   ├── baselines/
+│   ├── textcnn/
+│   ├── phobert/
+│   ├── distillation/
+│   ├── evaluation/
+│   └── plans/
 └── scripts/
     ├── download_data.ps1
     └── smoke_test.ps1
@@ -638,19 +645,19 @@ Một task chỉ được coi là xong khi:
 - [x] Đã tải UIT-VSFC và có script tải lại.
 - [x] Đã có `src/data/load.py` và `configs/label_map.json`.
 - [x] Đã xác minh label mapping và data audit.
-- [x] Đã có EDA, hình và báo cáo `reports/eda_summary.md`.
-- [x] Đã có baseline TF-IDF + Logistic Regression và `reports/baseline_report.md`.
-- [x] Đã có TextCNN single-task và `reports/textcnn_single_report.md`.
-- [x] Đã có TextCNN multi-task và `reports/textcnn_multitask_report.md`.
-- [x] Đã có PhoBERT frozen multi-task và `reports/phobert_multitask_report.md`.
-- [x] Đã có PhoBERT keyword-aware multi-task và `reports/phobert_keyword_multitask_report.md`.
+- [x] Đã có EDA, hình và báo cáo `reports/data/eda_summary.md`.
+- [x] Đã có baseline TF-IDF + Logistic Regression và `reports/baselines/tfidf/baseline_report.md`.
+- [x] Đã có TextCNN single-task và `reports/textcnn/single/textcnn_single_report.md`.
+- [x] Đã có TextCNN multi-task và `reports/textcnn/multitask/textcnn_multitask_report.md`.
+- [x] Đã có PhoBERT frozen multi-task và `reports/phobert/frozen/phobert_multitask_report.md`.
+- [x] Đã có PhoBERT keyword-aware multi-task và `reports/phobert/keyword/phobert_keyword_multitask_report.md`.
 - [x] Đã có demo Streamlit và `src.predict`.
-- [x] Đã có 3-seed evaluation và `reports/seed_summary.md`.
-- [x] Đã có McNemar + bootstrap và `reports/statistical_tests.md`.
+- [x] Đã có 3-seed evaluation và `reports/evaluation/seed_summary.md`.
+- [x] Đã có McNemar + bootstrap và `reports/evaluation/statistical_tests.md`.
 - [x] Đã trích teacher soft labels cho distillation.
-- [x] Đã có TextCNN student distillation và `reports/distillation_summary.md`.
-- [x] Đã có calibration và `reports/calibration_report.md`.
-- [x] Đã có robustness và `reports/robustness_report.md`.
+- [x] Đã có TextCNN student distillation và `reports/distillation/distillation_summary.md`.
+- [x] Đã có calibration và `reports/evaluation/calibration_report.md`.
+- [x] Đã có robustness và `reports/evaluation/robustness_report.md`.
 - [x] Đã có demo model selector teacher/student + calibrated confidence.
 - [x] Đã có cảnh báo multi-topic + top-2 trong demo.
 - [ ] Chưa có báo cáo tổng hợp.

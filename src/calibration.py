@@ -20,6 +20,7 @@ from torch.utils.data import DataLoader
 
 from src.data.dataset import TextCNNMultiTaskDataset, Vocab, collate_multitask
 from src.models.textcnn import TextCNNMultiTask
+from src.report_paths import EVALUATION_DIR
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TEACHER_DIR = PROJECT_ROOT / "data" / "processed" / "teacher_soft_labels"
@@ -27,7 +28,7 @@ DEFAULT_TOKENIZED_DIR = PROJECT_ROOT / "data" / "processed" / "uit_vsfc_tokenize
 DEFAULT_STUDENT_CHECKPOINT = (
     PROJECT_ROOT / "models" / "textcnn_distilled" / "textcnn_distilled_best.pt"
 )
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = EVALUATION_DIR
 
 
 def git_commit() -> str:
@@ -345,8 +346,8 @@ def main() -> None:
         "",
         "## Figures",
         "",
-        "- `reports/figures/calibration_sentiment_reliability.png`",
-        "- `reports/figures/calibration_topic_reliability.png`",
+        "- `reports/evaluation/figures/calibration_sentiment_reliability.png`",
+        "- `reports/evaluation/figures/calibration_topic_reliability.png`",
         "",
         "## Nhận xét",
         "",

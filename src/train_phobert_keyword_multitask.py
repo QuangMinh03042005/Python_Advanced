@@ -28,6 +28,7 @@ from src.metrics import (
     plot_confusion_matrix,
 )
 from src.models.phobert_multitask import KeywordAwarePhoBERTMultiTask
+from src.report_paths import PHOBERT_KEYWORD_DIR, resolve_results_path
 from src.train_phobert_multitask import (
     DEFAULT_LABEL_MAP_PATH,
     class_weights_for,
@@ -43,7 +44,7 @@ from src.train_phobert_multitask import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "phobert_keyword_multitask.yaml"
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = PHOBERT_KEYWORD_DIR
 DEFAULT_MODELS_DIR = PROJECT_ROOT / "models" / "phobert_keyword_multitask"
 DEFAULT_RUNS_DIR = PROJECT_ROOT / "runs"
 
@@ -231,8 +232,7 @@ def evaluate(
     }
 
 
-def comparison_table(reports_dir: Path) -> pd.DataFrame:
-    results_path = reports_dir / "results.csv"
+def comparison_table(results_path: Path) -> pd.DataFrame:
     if not results_path.exists():
         return pd.DataFrame()
     results = pd.read_csv(results_path)
@@ -640,7 +640,7 @@ def run(
             }
         )
 
-    results_path = reports_dir / "results.csv"
+    results_path = resolve_results_path(reports_dir)
     if results_path.exists():
         existing = pd.read_csv(results_path)
         existing = existing[existing["model"] != "phobert_keyword_multitask"]
@@ -678,7 +678,7 @@ def run(
         best_epoch=best_epoch,
         train_time_sec=train_time_sec,
         reports_dir=reports_dir,
-        comparison=comparison_table(reports_dir),
+        comparison=comparison_table(results_path),
     )
 
     return {

@@ -6,19 +6,19 @@
     "parameter_count": 135198571,
     "estimated_size_mb": 515.7416191101074,
     "saved_checkpoint_mb": 0.7695207595825195,
-    "elapsed_sec": 5.113971100000072,
-    "ms_per_sentence": 51.139711000000716,
-    "sentences_per_sec": 19.554275541369133
+    "elapsed_sec": 6.367625199999566,
+    "ms_per_sentence": 63.67625199999566,
+    "sentences_per_sec": 15.704441900884309
   },
   "student": {
     "model": "TextCNN distilled student",
     "parameter_count": 407055,
     "estimated_size_mb": 1.5527915954589844,
     "saved_checkpoint_mb": 1.6009149551391602,
-    "elapsed_sec": 0.1976713999997628,
-    "ms_per_sentence": 1.976713999997628,
-    "sentences_per_sec": 505.89007818085975
+    "elapsed_sec": 0.23049290000017209,
+    "ms_per_sentence": 2.304929000001721,
+    "sentences_per_sec": 433.852843189206
   },
-  "speedup": 25.871072395936935,
+  "speedup": 27.62612297383048,
   "size_reduction": 332.1383375710899
 }

@@ -27,10 +27,11 @@ from src.metrics import (
     per_class_report,
     plot_confusion_matrix,
 )
+from src.report_paths import BASELINE_DIR, resolve_results_path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "baseline.yaml"
-DEFAULT_REPORTS_DIR = PROJECT_ROOT / "reports"
+DEFAULT_REPORTS_DIR = BASELINE_DIR
 DEFAULT_MODELS_DIR = PROJECT_ROOT / "models" / "baseline"
 DEFAULT_RUNS_DIR = PROJECT_ROOT / "runs"
 
@@ -394,7 +395,7 @@ def run_baseline(
             }
         )
 
-    results_path = reports_dir / "results.csv"
+    results_path = resolve_results_path(reports_dir)
     if results_path.exists():
         existing = pd.read_csv(results_path)
         existing = existing[existing["model"] != "tfidf_logreg"]
