@@ -651,13 +651,14 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có TextCNN student distillation và `reports/distillation_summary.md`.
 - [x] Đã có calibration và `reports/calibration_report.md`.
 - [x] Đã có robustness và `reports/robustness_report.md`.
+- [x] Đã có demo model selector teacher/student + calibrated confidence.
 - [ ] Chưa có báo cáo tổng hợp.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Demo model selector teacher/student + calibration.
-2. Viết báo cáo tổng hợp.
-3. Làm slide và video demo.
+1. Viết báo cáo tổng hợp.
+2. Làm slide và video demo.
+3. Kiểm tra lại toàn bộ pipeline từ môi trường sạch.
 
 ---
 

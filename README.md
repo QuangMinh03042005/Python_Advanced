@@ -468,17 +468,19 @@ có thể gặp lỗi trên; khi đó dùng `scripts\run_demo.ps1`.
 
 Demo gồm:
 
+- Chọn **PhoBERT teacher** hoặc **TextCNN student**.
 - Nhập một câu → dự đoán cảm xúc + chủ đề.
-- Hiển thị confidence và xác suất từng lớp.
+- Hiển thị confidence đã calibration, xác suất từng lớp, latency và số tham số.
 - Cảnh báo khi confidence thấp.
-- Hiển thị token sau tách từ.
-- Tab so sánh kết quả test của các mô hình.
+- Hiển thị token sau tách từ và keyword chủ đề.
+- Tab so sánh kết quả test và benchmark CPU teacher/student.
 - Tab giới thiệu và hạn chế.
 
 Có thể test nhanh bằng CLI:
 
 ```powershell
 python -m src.predict --text "Cơ sở vật chất còn yếu, phòng học thiếu máy chiếu"
+python -m src.predict_textcnn --text "Cơ sở vật chất còn yếu, phòng học thiếu máy chiếu" --sentiment-temperature 1.930002 --topic-temperature 1.823441
 ```
 
 ## Cấu trúc dự kiến
