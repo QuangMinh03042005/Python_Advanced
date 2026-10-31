@@ -16,6 +16,8 @@
 - [x] TextCNN multi-task
 - [x] PhoBERT multi-task
 - [x] PhoBERT keyword-aware multi-task (improved)
+- [x] Teacher soft labels cho distillation
+- [x] TextCNN student distillation
 - [x] 3-seed evaluation
 - [x] Demo Streamlit
 - [ ] Báo cáo
@@ -367,6 +369,37 @@ Kết quả kiểm tra:
 - Extraction time CPU: khoảng **515 giây**.
 - Xác suất đã kiểm tra tổng = 1.
 - Báo cáo: [reports/teacher_soft_labels.md](reports/teacher_soft_labels.md).
+
+## TextCNN student distillation
+
+Train student:
+
+```powershell
+python -m src.train_textcnn_distill
+```
+
+So sánh test, 3 seed:
+
+| Model | Sentiment F1 | Topic F1 | Joint |
+|---|---:|---:|---:|
+| PhoBERT teacher | **0.7760 ± 0.0060** | 0.7597 ± 0.0067 | **0.7989 ± 0.0059** |
+| TextCNN hard-label | 0.7559 ± 0.0024 | 0.7508 ± 0.0103 | 0.7654 ± 0.0090 |
+| **TextCNN distilled** | 0.7627 ± 0.0047 | **0.7607 ± 0.0102** | 0.7766 ± 0.0087 |
+
+Hiệu năng CPU:
+
+- Student: **407.055** tham số, ~**1.55 MB**.
+- Teacher: **135.198.571** tham số, ~**515.74 MB**.
+- Latency: **1.98 ms/câu** vs **51.14 ms/câu**.
+- Nhanh hơn **25.9×**, nhỏ hơn **332×**.
+
+Kết luận:
+
+- Distillation tăng đều F1 so với TextCNN hard-label.
+- Student gần ngang teacher ở topic, thấp hơn ở sentiment/joint.
+- Đây là trade-off hợp lý cho triển khai CPU.
+
+Chi tiết: [reports/distillation_summary.md](reports/distillation_summary.md).
 
 ## Demo Streamlit
 

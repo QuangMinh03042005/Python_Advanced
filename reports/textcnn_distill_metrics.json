@@ -1,0 +1,73 @@
+{
+  "run_id": "textcnn_distill_20261031_124149",
+  "git_commit": "59c73e8",
+  "config": {
+    "seed": 42,
+    "lambda_topic": 1.0,
+    "temperature": 2.0,
+    "distill_weight": 0.5,
+    "data": {
+      "tokenized_dir": "data/processed/uit_vsfc_tokenized",
+      "teacher_dir": "data/processed/teacher_soft_labels",
+      "max_len": 48,
+      "min_freq": 2,
+      "max_vocab_size": 50000
+    },
+    "model": {
+      "embed_dim": 100,
+      "num_filters": 100,
+      "kernel_sizes": [
+        3,
+        4,
+        5
+      ],
+      "shared_hidden": 256,
+      "dropout": 0.5,
+      "embedding_dropout": 0.1
+    },
+    "training": {
+      "batch_size": 32,
+      "epochs": 20,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "patience": 3,
+      "max_grad_norm": 1.0,
+      "num_workers": 0,
+      "class_weight": true
+    }
+  },
+  "device": "cpu",
+  "best_epoch": 9,
+  "train_time_sec": 87.87363939999977,
+  "parameter_count": 407055,
+  "model_size_mb": 1.5527915954589844,
+  "metrics": {
+    "dev": {
+      "sentiment": {
+        "accuracy": 0.9216677195198989,
+        "macro_f1": 0.8188035462701247,
+        "weighted_f1": 0.9241125363743997
+      },
+      "topic": {
+        "accuracy": 0.8603916614024005,
+        "macro_f1": 0.7588273423344667,
+        "weighted_f1": 0.8661898060151764
+      },
+      "joint_accuracy": 0.8035375868603917
+    },
+    "test": {
+      "sentiment": {
+        "accuracy": 0.8935565382185723,
+        "macro_f1": 0.767405316859625,
+        "weighted_f1": 0.8953073177879098
+      },
+      "topic": {
+        "accuracy": 0.8439671509791535,
+        "macro_f1": 0.7489981517936906,
+        "weighted_f1": 0.8527518666296942
+      },
+      "joint_accuracy": 0.7668982943777637
+    }
+  },
+  "checkpoint": "models/textcnn_distilled/textcnn_distilled_best.pt"
+}
