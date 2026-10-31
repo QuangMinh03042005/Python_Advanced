@@ -245,3 +245,58 @@ def collate_keyword_embeddings(
     sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
     topic_labels = torch.stack([item["topic_label"] for item in batch])
     return embeddings, keyword_features, sentiment_labels, topic_labels
+
+
+class DistillTextCNNDataset(Dataset):
+    def __init__(
+        self,
+        frame: pd.DataFrame,
+        vocab: Vocab,
+        sentiment2id: dict[str, int],
+        topic2id: dict[str, int],
+        sentiment_probs: np.ndarray,
+        topic_probs: np.ndarray,
+        max_len: int,
+    ) -> None:
+        if len(frame) != len(sentiment_probs) or len(frame) != len(topic_probs):
+            raise ValueError("Frame and teacher probability lengths do not match")
+        if "tokens" not in frame.columns:
+            raise ValueError("Missing tokens column")
+
+        self.input_ids = [
+            vocab.encode(str(tokens).split(), max_len=max_len)
+            for tokens in frame["tokens"].tolist()
+        ]
+        self.sentiment_labels = [
+            sentiment2id[str(label)]
+            for label in frame["sentiment"].tolist()
+        ]
+        self.topic_labels = [
+            topic2id[str(label)]
+            for label in frame["topic"].tolist()
+        ]
+        self.sentiment_probs = np.asarray(sentiment_probs, dtype=np.float32)
+        self.topic_probs = np.asarray(topic_probs, dtype=np.float32)
+
+    def __len__(self) -> int:
+        return len(self.input_ids)
+
+    def __getitem__(self, index: int) -> dict[str, torch.Tensor]:
+        return {
+            "input_ids": torch.tensor(self.input_ids[index], dtype=torch.long),
+            "sentiment_label": torch.tensor(self.sentiment_labels[index], dtype=torch.long),
+            "topic_label": torch.tensor(self.topic_labels[index], dtype=torch.long),
+            "sentiment_probs": torch.from_numpy(self.sentiment_probs[index]),
+            "topic_probs": torch.from_numpy(self.topic_probs[index]),
+        }
+
+
+def collate_distill(
+    batch: list[dict[str, torch.Tensor]],
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    input_ids = torch.stack([item["input_ids"] for item in batch])
+    sentiment_labels = torch.stack([item["sentiment_label"] for item in batch])
+    topic_labels = torch.stack([item["topic_label"] for item in batch])
+    sentiment_probs = torch.stack([item["sentiment_probs"] for item in batch])
+    topic_probs = torch.stack([item["topic_probs"] for item in batch])
+    return input_ids, sentiment_labels, topic_labels, sentiment_probs, topic_probs
