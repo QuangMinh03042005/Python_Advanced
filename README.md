@@ -18,6 +18,7 @@
 - [x] PhoBERT keyword-aware multi-task (improved)
 - [x] Teacher soft labels cho distillation
 - [x] TextCNN student distillation
+- [x] Calibration + robustness
 - [x] 3-seed evaluation
 - [x] Demo Streamlit
 - [ ] Báo cáo
@@ -400,6 +401,44 @@ Kết luận:
 - Đây là trade-off hợp lý cho triển khai CPU.
 
 Chi tiết: [reports/distillation_summary.md](reports/distillation_summary.md).
+
+## Calibration
+
+Temperature scaling fit trên dev, đánh giá trên test:
+
+| Model | Task | T | ECE before | ECE after |
+|---|---|---:|---:|---:|
+| Teacher | sentiment | 1.366 | 0.0242 | 0.0215 |
+| Teacher | topic | 1.230 | 0.0254 | **0.0097** |
+| Student | sentiment | 1.930 | 0.0658 | **0.0166** |
+| Student | topic | 1.823 | 0.0805 | **0.0145** |
+
+- Student overconfident hơn teacher trước calibration.
+- Sau calibration, ECE của student giảm mạnh.
+- Accuracy không đổi vì temperature chỉ sửa confidence.
+
+Chi tiết: [reports/calibration_report.md](reports/calibration_report.md).
+
+## Robustness
+
+Test trên 800 câu, giữ nguyên nhãn, chỉ thay đổi input:
+
+| Variant | Teacher topic F1 | Student topic F1 |
+|---|---:|---:|
+| clean | 0.7727 | 0.7322 |
+| no_diacritics | 0.1517 | 0.1165 |
+| teencode | 0.6833 | 0.6303 |
+| typo | 0.7699 | 0.7005 |
+| emoji | 0.6661 | 0.7440 |
+| shuffle | 0.6678 | 0.7099 |
+
+Kết luận:
+
+- Mất dấu là lỗi nghiêm trọng nhất với cả hai mô hình.
+- Teacher nhạy với emoji và đảo trật tự từ hơn student.
+- Student bền vững hơn với emoji/shuffle nhưng yếu hơn ở clean.
+
+Chi tiết: [reports/robustness_report.md](reports/robustness_report.md).
 
 ## Demo Streamlit
 

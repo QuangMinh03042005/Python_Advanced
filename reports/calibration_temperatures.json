@@ -1,0 +1,14 @@
+{
+  "git_commit": "8e5bcc8",
+  "temperatures": {
+    "teacher": {
+      "sentiment": 1.3660144767032398,
+      "topic": 1.2300980875816938
+    },
+    "student": {
+      "sentiment": 1.9300015157553563,
+      "topic": 1.8234407327367204
+    }
+  },
+  "student_checkpoint": "D:\\workspace\\python\\Python_Advanced\\models\\textcnn_distilled\\textcnn_distilled_best.pt"
+}

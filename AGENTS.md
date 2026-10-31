@@ -649,14 +649,15 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có McNemar + bootstrap và `reports/statistical_tests.md`.
 - [x] Đã trích teacher soft labels cho distillation.
 - [x] Đã có TextCNN student distillation và `reports/distillation_summary.md`.
-- [ ] Chưa có calibration/robustness.
-- [ ] Chưa có báo cáo.
+- [x] Đã có calibration và `reports/calibration_report.md`.
+- [x] Đã có robustness và `reports/robustness_report.md`.
+- [ ] Chưa có báo cáo tổng hợp.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Calibration + robustness.
-2. Demo model selector teacher/student.
-3. Viết báo cáo tổng hợp.
+1. Demo model selector teacher/student + calibration.
+2. Viết báo cáo tổng hợp.
+3. Làm slide và video demo.
 
 ---
 
