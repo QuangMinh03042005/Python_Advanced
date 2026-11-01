@@ -21,7 +21,7 @@
 - [x] Calibration + robustness
 - [x] 3-seed evaluation
 - [x] Demo Streamlit
-- [ ] Báo cáo
+- [x] Báo cáo LaTeX + PDF
 
 ## Yêu cầu
 
@@ -514,6 +514,20 @@ Kỳ vọng:
 ```text
 torch 2.14.1+cpu cuda False
 PhobertTokenizer
+```
+
+## Báo cáo
+
+- PDF: [report/main.pdf](report/main.pdf)
+- LaTeX source: [report/main.tex](report/main.tex)
+- Hướng dẫn compile: [report/README.md](report/README.md)
+
+Compile lại:
+
+```powershell
+cd report
+xelatex -interaction=nonstopmode main.tex
+xelatex -interaction=nonstopmode main.tex
 ```
 
 ## Ghi chú

@@ -660,13 +660,14 @@ Một task chỉ được coi là xong khi:
 - [x] Đã có robustness và `reports/evaluation/robustness_report.md`.
 - [x] Đã có demo model selector teacher/student + calibrated confidence.
 - [x] Đã có cảnh báo multi-topic + top-2 trong demo.
-- [ ] Chưa có báo cáo tổng hợp.
+- [x] Đã có báo cáo LaTeX/PDF tại `report/main.pdf`.
+- [ ] Chưa có slide/video bảo vệ.
 
 ### Thứ tự ưu tiên tiếp theo
 
-1. Viết báo cáo tổng hợp.
-2. Làm slide và video demo.
-3. Kiểm tra lại toàn bộ pipeline từ môi trường sạch.
+1. Làm slide và video demo.
+2. Kiểm tra lại toàn bộ pipeline từ môi trường sạch.
+3. Rà soát báo cáo theo rubric của giảng viên.
 
 ---
 
