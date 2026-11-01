@@ -97,56 +97,64 @@ Lê Thành Duy (3123580007)}\\[0.07cm]
 Người & Nội dung & Thời lượng \\
 \midrule
 Đinh Quang Minh &
-Mở đầu, bài toán, mục tiêu, pipeline; demo, ý nghĩa thực tế, kết luận. &
-8 phút \\
+Mở đầu, bài toán, mục tiêu, pipeline; demo sản phẩm. &
+7 phút \\
 \addlinespace
 Dương Tấn Cường &
-UIT-VSFC, EDA, TextCNN, PhoBERT, keyword-aware head; hạn chế. &
-6 phút \\
+UIT-VSFC, EDA, multi-task, TextCNN, PhoBERT, keyword; calibration, robustness. &
+7 phút \\
 \addlinespace
 Lê Thành Duy &
-Thực nghiệm, kết quả 3 seed, kiểm định, distillation, calibration, robustness. &
-5 phút \\
+Thực nghiệm, kết quả 3 seed, kiểm định, distillation, hạn chế, kết luận. &
+7 phút \\
 \midrule
-\multicolumn{2}{@{}r}{Q\&A và thảo luận} & 3--5 phút \\
+\multicolumn{2}{@{}r}{Q\&A và thảo luận (slide 25)} & 3--5 phút \\
 \bottomrule
 \end{tabularx}
 \vspace{0.35cm}
 
 \begin{block}{Thứ tự trình bày}
-Minh mở đầu $\rightarrow$ Cường trình bày dữ liệu và mô hình $\rightarrow$ Duy trình bày kết quả $\rightarrow$ Minh demo $\rightarrow$ Cường bổ sung hạn chế $\rightarrow$ Minh kết luận.
+Minh mở đầu và demo $\rightarrow$ Cường trình bày dữ liệu, mô hình, độ tin cậy $\rightarrow$ Duy trình bày kết quả và kết luận $\rightarrow$ Q\&A. Mỗi người nói liền mạch, không quay lại.
 \end{block}
 \end{frame}
 
 % ==================== 3. LUỒNG BÀN GIAO ====================
 \begin{frame}{Luồng trình bày: ai nói gì, bàn giao cho ai}
 \scriptsize
-\begin{tabularx}{\textwidth}{@{}>{\bfseries}p{2.1cm}p{1.1cm}X>{\bfseries}p{2.0cm}@{}}
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}p{1.0cm}>{\bfseries}p{1.7cm}p{1.0cm}X>{\bfseries}p{1.7cm}@{}}
 \toprule
-Người & Slide & Nội dung & Bàn giao cho \\
+Phần & Người & Slide & Nội dung & Bàn giao \\
 \midrule
-Minh & 1--6 & Mở đầu, bài toán, mục tiêu, pipeline & Cường \\
-Cường & 7--11 & UIT-VSFC, EDA, multi-task, TextCNN, PhoBERT, keyword & Duy \\
-Duy & 12--18 & Thực nghiệm, kết quả, kiểm định, distillation, calibration, robustness & Minh \\
-Minh & 19 & Demo và ý nghĩa thực tế & Cường \\
-Cường & 20 & Hạn chế & Minh \\
-Minh & 21--22 & Kết luận và Q\&A & Kết thúc \\
+1 & Minh & 1--8 & Mở đầu, bài toán, mục tiêu, pipeline, demo & Cường \\
+2 & Cường & 9--16 & UIT-VSFC, EDA, mô hình, calibration, robustness & Duy \\
+3 & Duy & 17--25 & Thực nghiệm, kết quả, kiểm định, distillation, hạn chế, kết luận, Q\&A & Kết thúc \\
 \bottomrule
 \end{tabularx}
 
 \vspace{0.2cm}
 \begin{block}{Câu chuyển}
 \begin{itemize}
-  \item Minh $\rightarrow$ Cường: “Để hiểu dữ liệu, mời Cường.”
+  \item Minh $\rightarrow$ Cường: “Sang phần dữ liệu và mô hình, mời Cường.”
   \item Cường $\rightarrow$ Duy: “Kết quả thực nghiệm, mời Duy.”
-  \item Duy $\rightarrow$ Minh: “Minh sẽ demo và nói ý nghĩa thực tế.”
-  \item Minh $\rightarrow$ Cường: “Cường bổ sung hạn chế.”
-  \item Cường $\rightarrow$ Minh: “Minh chốt lại.”
+  \item Duy $\rightarrow$ Kết thúc: “Duy chốt và mời Q\&A.”
 \end{itemize}
 \end{block}
 \end{frame}
 
-% ==================== 4. BÀI TOÁN ====================
+% ==================== 4. PHẦN 1 ====================
+\begin{frame}[plain]
+\begin{center}
+\vspace*{0.9cm}
+{\small\bfseries\color{sgublue} PHẦN 1}\\[0.25cm]
+{\Huge\bfseries\color{sgublue} BÀI TOÁN \& SẢN PHẨM}\\[0.2cm]
+{\color{sgublue}\rule{0.55\textwidth}{0.8pt}}\\[0.2cm]
+{\large Trình bày: Đinh Quang Minh}\\[0.2cm]
+{\small Bài toán, mục tiêu, pipeline, demo}\\[0.15cm]
+{\small 8 slide -- khoảng 7 phút}
+\end{center}
+\end{frame}
+
+% ==================== 5. BÀI TOÁN ====================
 \begin{frame}{Bài toán và động lực}
 \begin{columns}[T]
 \begin{column}{0.55\textwidth}
@@ -184,7 +192,7 @@ Câu thực tế thường có nhiều chủ đề; nhãn hiện tại chỉ là
 \end{columns}
 \end{frame}
 
-% ==================== 4. MỤC TIÊU ====================
+% ==================== 6. MỤC TIÊU ====================
 \begin{frame}{Mục tiêu và đóng góp}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
@@ -217,7 +225,7 @@ Mô hình nào tốt hơn, cải thiện có bền vững không, và có thể 
 \end{block}
 \end{frame}
 
-% ==================== 5. PIPELINE ====================
+% ==================== 7. PIPELINE ====================
 \begin{frame}{Pipeline tổng quan}
 \begin{center}
 \resizebox{0.95\textwidth}{!}{%
@@ -264,7 +272,56 @@ Teacher PhoBERT $\rightarrow$ student TextCNN.
 \end{columns}
 \end{frame}
 
-% ==================== 6. DATASET ====================
+% ==================== 8. DEMO ====================
+\begin{frame}{Demo Streamlit và ý nghĩa thực tế}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{ Demo có gì?}
+\begin{itemize}
+  \item Chọn teacher / student.
+  \item Confidence đã calibration.
+  \item Top-2 chủ đề.
+  \item Keyword chủ đề phát hiện.
+  \item Latency và số tham số.
+  \item Cảnh báo multi-topic.
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Triage phản hồi}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Cặp & Hành động gợi ý \\
+\midrule
+negative + lecturer & Xem lại giảng dạy \\
+negative + facility & Kiểm tra phòng/thiết bị \\
+negative + training & Xem lại chương trình \\
+positive + lecturer & Ghi nhận, nhân rộng \\
+\bottomrule
+\end{tabular}
+\end{block}
+\end{column}
+\end{columns}
+
+\vspace{0.2cm}
+\begin{block}{Thông điệp}
+Hệ thống là công cụ \emph{hỗ trợ} đọc và ưu tiên phản hồi, không thay thế con người.
+\end{block}
+\end{frame}
+
+% ==================== 9. PHẦN 2 ====================
+\begin{frame}[plain]
+\begin{center}
+\vspace*{0.9cm}
+{\small\bfseries\color{sgublue} PHẦN 2}\\[0.25cm]
+{\Huge\bfseries\color{sgublue} DỮ LIỆU, MÔ HÌNH \& ĐỘ TIN CẬY}\\[0.2cm]
+{\color{sgublue}\rule{0.55\textwidth}{0.8pt}}\\[0.2cm]
+{\large Trình bày: Dương Tấn Cường}\\[0.2cm]
+{\small UIT-VSFC, EDA, TextCNN, PhoBERT, calibration, robustness}\\[0.15cm]
+{\small 8 slide -- khoảng 7 phút}
+\end{center}
+\end{frame}
+
+% ==================== 10. DATASET ====================
 \begin{frame}{UIT-VSFC: dữ liệu và nhãn}
 \begin{columns}[T]
 \begin{column}{0.44\textwidth}
@@ -305,7 +362,7 @@ Nhãn topic là nhãn mức câu, không phải aspect. Một câu nhiều chủ
 \end{columns}
 \end{frame}
 
-% ==================== 7. EDA ====================
+% ==================== 11. EDA ====================
 \begin{frame}{EDA: những con số định hướng thiết kế}
 \begin{columns}[T]
 \begin{column}{0.55\textwidth}
@@ -330,7 +387,7 @@ Dùng class weight, macro-F1, per-class analysis; cẩn thận shortcut ``facili
 \end{columns}
 \end{frame}
 
-% ==================== 8. MULTI-TASK ====================
+% ==================== 12. MULTI-TASK ====================
 \begin{frame}{Multi-task learning}
 \begin{columns}[T]
 \begin{column}{0.5\textwidth}
@@ -365,7 +422,7 @@ Chia sẻ biểu diễn giúp học tốt hơn khi dữ liệu nhỏ; một lầ
 \end{columns}
 \end{frame}
 
-% ==================== 9. TEXTCNN ====================
+% ==================== 13. TEXTCNN ====================
 \begin{frame}{TextCNN: nhẹ, nhanh, phù hợp CPU}
 \begin{columns}[T]
 \begin{column}{0.55\textwidth}
@@ -393,7 +450,7 @@ Không mô hình hóa ngữ cảnh xa; phụ thuộc embedding và dữ liệu t
 \end{columns}
 \end{frame}
 
-% ==================== 10. PHOBERT + KEYWORD ====================
+% ==================== 14. PHOBERT + KEYWORD ====================
 \begin{frame}{PhoBERT frozen và keyword-aware head}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
@@ -426,7 +483,88 @@ Keyword-aware tăng topic \good{+0.0205} và joint \good{+0.0199} so với PhoBE
 \end{block}
 \end{frame}
 
-% ==================== 11. SETUP ====================
+% ==================== 15. CALIBRATION ====================
+\begin{frame}{Calibration: confidence có đáng tin?}
+\small
+\begin{center}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Model & Task & T & ECE trước & ECE sau \\
+\midrule
+Teacher & sentiment & 1.366 & 0.0242 & 0.0215 \\
+Teacher & topic & 1.230 & 0.0254 & \good{0.0097} \\
+Student & sentiment & 1.930 & 0.0658 & \good{0.0166} \\
+Student & topic & 1.823 & 0.0805 & \good{0.0145} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{itemize}
+  \item Student overconfident hơn teacher trước calibration.
+  \item Temperature scaling giảm ECE mạnh.
+  \item Accuracy không đổi: chỉ sửa confidence, không sửa nhãn.
+\end{itemize}
+\end{column}
+\begin{column}{0.42\textwidth}
+\begin{block}{Cách làm}
+Fit temperature trên dev, đánh giá ECE trên test với 15 bins.
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ==================== 16. ROBUSTNESS ====================
+\begin{frame}{Robustness: mô hình yếu ở đâu?}
+\small
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Variant & Teacher & Student \\
+\midrule
+Clean & 0.7727 & 0.7322 \\
+Không dấu & \bad{0.1517} & \bad{0.1165} \\
+Teencode & 0.6833 & 0.6303 \\
+Typo & 0.7699 & 0.7005 \\
+Emoji & 0.6661 & \good{0.7440} \\
+Đảo trật tự & 0.6678 & \good{0.7099} \\
+\bottomrule
+\end{tabular}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{block}{Nhận xét}
+\begin{itemize}
+  \item Mất dấu là điểm yếu nghiêm trọng nhất.
+  \item Teacher nhạy với emoji và shuffle.
+  \item Student bền vững hơn ở hai perturbation này.
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+
+\vspace{0.15cm}
+\begin{alertblock}{Hàm ý}
+Cần chuẩn hóa input và bổ sung augmentation trước khi triển khai thực tế.
+\end{alertblock}
+\end{frame}
+
+% ==================== 17. PHẦN 3 ====================
+\begin{frame}[plain]
+\begin{center}
+\vspace*{0.9cm}
+{\small\bfseries\color{sgublue} PHẦN 3}\\[0.25cm]
+{\LARGE\bfseries\color{sgublue} THỰC NGHIỆM, KẾT QUẢ \& KẾT LUẬN}\\[0.2cm]
+{\color{sgublue}\rule{0.55\textwidth}{0.8pt}}\\[0.2cm]
+{\large Trình bày: Lê Thành Duy}\\[0.2cm]
+{\small Kết quả, kiểm định, distillation, hạn chế, kết luận}\\[0.15cm]
+{\small 9 slide -- khoảng 7 phút}
+\end{center}
+\end{frame}
+
+% ==================== 18. SETUP ====================
 \begin{frame}{Thiết lập thực nghiệm}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
@@ -461,7 +599,7 @@ Test không được dùng để chọn seed hay hyperparameter.
 \end{alertblock}
 \end{frame}
 
-% ==================== 12. MAIN RESULTS ====================
+% ==================== 19. MAIN RESULTS ====================
 \begin{frame}{Kết quả test (seed 42)}
 \small
 \begin{center}
@@ -498,7 +636,7 @@ Gần như giữ sentiment, tăng topic và joint.
 \end{columns}
 \end{frame}
 
-% ==================== 13. 3-SEED ====================
+% ==================== 20. 3-SEED ====================
 \begin{frame}{Kết quả 3 seed: ổn định hơn một seed}
 \small
 \begin{center}
@@ -528,7 +666,7 @@ Kết quả không phải may mắn từ một seed; test vẫn chỉ được �
 \end{columns}
 \end{frame}
 
-% ==================== 14. STATS ====================
+% ==================== 21. STATS ====================
 \begin{frame}{Kiểm định thống kê: cải thiện có bền vững?}
 \small
 \begin{center}
@@ -565,7 +703,7 @@ $p$-value chưa hiệu chỉnh đa so sánh; Bonferroni $\alpha=0.0028$.
 \end{columns}
 \end{frame}
 
-% ==================== 15. DISTILLATION ====================
+% ==================== 22. DISTILLATION ====================
 \begin{frame}{Distillation: nhỏ hơn 332 lần, nhanh hơn 27.6 lần}
 \begin{columns}[T]
 \begin{column}{0.52\textwidth}
@@ -605,111 +743,7 @@ Student gần như ngang teacher ở topic, thấp hơn ở sentiment/joint, nh�
 \end{block}
 \end{frame}
 
-% ==================== 16. CALIBRATION ====================
-\begin{frame}{Calibration: confidence có đáng tin?}
-\small
-\begin{center}
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-Model & Task & T & ECE trước & ECE sau \\
-\midrule
-Teacher & sentiment & 1.366 & 0.0242 & 0.0215 \\
-Teacher & topic & 1.230 & 0.0254 & \good{0.0097} \\
-Student & sentiment & 1.930 & 0.0658 & \good{0.0166} \\
-Student & topic & 1.823 & 0.0805 & \good{0.0145} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.2cm}
-\begin{columns}[T]
-\begin{column}{0.55\textwidth}
-\begin{itemize}
-  \item Student overconfident hơn teacher trước calibration.
-  \item Temperature scaling giảm ECE mạnh.
-  \item Accuracy không đổi: chỉ sửa confidence, không sửa nhãn.
-\end{itemize}
-\end{column}
-\begin{column}{0.42\textwidth}
-\begin{block}{Cách làm}
-Fit temperature trên dev, đánh giá ECE trên test với 15 bins.
-\end{block}
-\end{column}
-\end{columns}
-\end{frame}
-
-% ==================== 17. ROBUSTNESS ====================
-\begin{frame}{Robustness: mô hình yếu ở đâu?}
-\small
-\begin{columns}[T]
-\begin{column}{0.52\textwidth}
-\begin{tabular}{@{}lrr@{}}
-\toprule
-Variant & Teacher & Student \\
-\midrule
-Clean & 0.7727 & 0.7322 \\
-Không dấu & \bad{0.1517} & \bad{0.1165} \\
-Teencode & 0.6833 & 0.6303 \\
-Typo & 0.7699 & 0.7005 \\
-Emoji & 0.6661 & \good{0.7440} \\
-Đảo trật tự & 0.6678 & \good{0.7099} \\
-\bottomrule
-\end{tabular}
-\end{column}
-\begin{column}{0.45\textwidth}
-\begin{block}{Nhận xét}
-\begin{itemize}
-  \item Mất dấu là điểm yếu nghiêm trọng nhất.
-  \item Teacher nhạy với emoji và shuffle.
-  \item Student bền vững hơn ở hai perturbation này.
-\end{itemize}
-\end{block}
-\end{column}
-\end{columns}
-
-\vspace{0.15cm}
-\begin{alertblock}{Hàm ý}
-Cần chuẩn hóa input và bổ sung augmentation trước khi triển khai thực tế.
-\end{alertblock}
-\end{frame}
-
-% ==================== 18. DEMO ====================
-\begin{frame}{Demo Streamlit và ý nghĩa thực tế}
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
-\textbf{ Demo có gì?}
-\begin{itemize}
-  \item Chọn teacher / student.
-  \item Confidence đã calibration.
-  \item Top-2 chủ đề.
-  \item Keyword chủ đề phát hiện.
-  \item Latency và số tham số.
-  \item Cảnh báo multi-topic.
-\end{itemize}
-\end{column}
-\begin{column}{0.48\textwidth}
-\begin{block}{Triage phản hồi}
-\begin{tabular}{@{}ll@{}}
-\toprule
-Cặp & Hành động gợi ý \\
-\midrule
-negative + lecturer & Xem lại giảng dạy \\
-negative + facility & Kiểm tra phòng/thiết bị \\
-negative + training & Xem lại chương trình \\
-positive + lecturer & Ghi nhận, nhân rộng \\
-\bottomrule
-\end{tabular}
-\end{block}
-\end{column}
-\end{columns}
-
-\vspace{0.2cm}
-\begin{block}{Thông điệp}
-Hệ thống là công cụ \emph{hỗ trợ} đọc và ưu tiên phản hồi, không thay thế con người.
-\end{block}
-\end{frame}
-
-% ==================== 19. LIMITATIONS ====================
+% ==================== 23. LIMITATIONS ====================
 \begin{frame}{Hạn chế}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
@@ -738,7 +772,7 @@ Hệ thống là công cụ \emph{hỗ trợ} đọc và ưu tiên phản hồi,
 \end{alertblock}
 \end{frame}
 
-% ==================== 20. CONCLUSION ====================
+% ==================== 24. CONCLUSION ====================
 \begin{frame}{Kết luận và hướng phát triển}
 \begin{columns}[T]
 \begin{column}{0.52\textwidth}
@@ -769,7 +803,7 @@ Từ một bài toán phân loại, nhóm đã xây một pipeline có thể đo
 \end{block}
 \end{frame}
 
-% ==================== 21. Q&A ====================
+% ==================== 25. Q&A ====================
 \begin{frame}[plain]
 \begin{center}
 \includegraphics[width=2.0cm]{../reports/SGU-LOGO.png}\\[0.5cm]
