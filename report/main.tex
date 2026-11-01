@@ -68,7 +68,7 @@
 \vspace*{0.15cm}
 {\bfseries\large ỦY BAN NHÂN DÂN THÀNH PHỐ HỒ CHÍ MINH}\\[0.12cm]
 {\bfseries\Large TRƯỜNG ĐẠI HỌC SÀI GÒN}\\[0.15cm]
-{\bfseries\large KHOA CÔNG NGHỆ THÔNG TIN}\\[0.35cm]
+{\bfseries\large KHOA TOÁN - ỨNG DỤNG}\\[0.35cm]
 
 \includegraphics[width=3.05cm]{../reports/SGU-LOGO.png}\\[0.35cm]
 
@@ -200,9 +200,53 @@ Mục tiêu của đề tài gồm:
   \item Demo Streamlit có model selector, confidence đã calibration, top-2 chủ đề và cảnh báo multi-topic.
 \end{itemize}
 
+\section{Nghiên cứu liên quan}
+
+Bài toán phân tích phản hồi sinh viên nằm ở giao điểm của ba hướng nghiên cứu: phân tích cảm xúc tiếng Việt, multi-task learning và tối ưu mô hình cho triển khai thực tế.
+
+\subsection{Phân tích cảm xúc và chủ đề tiếng Việt}
+
+UIT-VSFC \cite{uitvsfc} là một trong những bộ dữ liệu chuẩn cho phản hồi sinh viên tiếng Việt. Dữ liệu gốc tập trung vào phân loại cảm xúc mức câu; nhãn chủ đề được cung cấp như một bài toán phụ. Các nghiên cứu trước thường dùng TF-IDF, SVM, CNN hoặc BiLSTM. Với sự xuất hiện của PhoBERT \cite{phobert}, các mô hình pretrained nhanh chóng trở thành baseline mạnh cho tiếng Việt nhờ biểu diễn ngữ cảnh tốt hơn.
+
+Tuy nhiên, phần lớn nghiên cứu chỉ tối ưu một task hoặc đánh giá trên một seed. Điều này làm khó so sánh độ ổn định và chưa trả lời rõ câu hỏi: với dữ liệu nhỏ và mất cân bằng, multi-task có thực sự giúp ích không?
+
+\subsection{Multi-task learning}
+
+Caruana \cite{mtl} mô tả multi-task learning như một cách dùng tín hiệu của task phụ để regularize và cải thiện biểu diễn chung. Hai chiến lược phổ biến:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item \textbf{Hard parameter sharing}: dùng chung encoder, tách head ở cuối.
+  \item \textbf{Soft parameter sharing}: mỗi task có encoder riêng, ràng buộc tham số giữa các encoder.
+\end{itemize}
+
+Đề tài chọn hard sharing vì đơn giản, dễ triển khai trên CPU và phù hợp với hai task có liên quan. Rủi ro chính là \emph{negative transfer}: task này kéo lùi task kia nếu phân bố hoặc độ khó khác nhau. Vì vậy báo cáo không chỉ so sánh multi-task với single-task mà còn kiểm tra per-class và hệ số \(\lambda_t\).
+
+\subsection{TextCNN và transformer}
+
+TextCNN \cite{textcnn} là kiến trúc nhẹ, dùng convolution để bắt n-gram cục bộ. Ưu điểm là tốc độ và khả năng học từ đầu trên dữ liệu nhỏ. Nhược điểm là không mô hình hóa ngữ cảnh xa và phụ thuộc vào chất lượng embedding.
+
+PhoBERT \cite{phobert} khắc phục nhược điểm ngữ cảnh nhưng có chi phí suy luận lớn. Trong điều kiện không GPU, fine-tune toàn bộ PhoBERT là không thực tế; vì vậy đề tài dùng encoder đóng băng và chỉ train head. Đây là điểm cân bằng giữa chất lượng và chi phí.
+
+\subsection{Distillation và triển khai}
+
+Knowledge distillation \cite{distill} chuyển tri thức từ teacher sang student bằng soft label. Hướng này đặc biệt phù hợp khi teacher lớn nhưng môi trường triển khai chỉ có CPU. Thay vì cố gắng fine-tune teacher, đề tài dùng teacher đã có để tạo soft label, sau đó train student TextCNN nhỏ hơn hàng trăm lần.
+
+\subsection{Calibration và robustness}
+
+Các mô hình hiện đại thường quá tự tin; Guo và cộng sự \cite{calibration} chỉ ra rằng confidence không phản ánh đúng xác suất đúng. Temperature scaling là phương pháp hậu xử lý đơn giản, chỉ dùng dev để fit nhiệt độ. Bên cạnh đó, robustness với teencode, mất dấu và lỗi gõ là vấn đề thực tế của dữ liệu mạng xã hội/tiếng Việt.
+
+\subsection{Khoảng trống}
+
+Các công trình riêng lẻ đã giải quyết từng phần: multi-task, PhoBERT, distillation hoặc calibration. Đề tài kết hợp các thành phần này trong một pipeline nhỏ, chạy CPU, có kiểm định thống kê và demo. Đóng góp không nằm ở kiến trúc hoàn toàn mới mà ở việc đánh giá có hệ thống và chuyển hóa kết quả thành công cụ có thể dùng.
+
 \section{Cấu trúc báo cáo}
 
-Chương 2 trình bày dữ liệu và EDA. Chương 3 mô tả phương pháp. Chương 4 trình bày thực nghiệm và kết quả. Chương 5 mô tả demo và ý nghĩa thực tế. Chương 6 kết luận và hướng phát triển.
+Chương 2 trình bày dữ liệu và EDA. Chương 3 mô tả phương pháp. Chương 4 trình bày thực nghiệm và kết quả. Chương 5 mô tả demo và ý nghĩa thực tế. Chương 6 trình bày kỹ nghệ phần mềm và tái lập. Chương 7 kết luận và hướng phát triển.
+
+
+\section*{Tóm tắt chương}
+Chương này đặt bài toán, mục tiêu, phạm vi và các đóng góp chính. Điểm cần nhấn mạnh là bài toán không chỉ là phân loại cảm xúc mà còn phải gắn cảm xúc với chủ đề để tạo ra tín hiệu có thể hành động. Chương tiếp theo mô tả dữ liệu và các đặc điểm phân bố ảnh hưởng đến thiết kế mô hình.
+
 
 % ==================== CHƯƠNG 2 ====================
 \chapter{DỮ LIỆU VÀ PHÂN TÍCH KHÁM PHÁ}
@@ -312,6 +356,11 @@ Các phát hiện chính:
 \end{itemize}
 
 Những đặc điểm này định hướng thiết kế: dùng class weight, macro-F1, kiểm tra per-class và phân tích lỗi định tính.
+
+
+\section*{Tóm tắt chương}
+Chương này mô tả nguồn dữ liệu, quy ước nhãn và các đặc điểm mất cân bằng. Các phát hiện EDA giải thích vì sao báo cáo dùng macro-F1, class weight và phân tích per-class thay vì chỉ báo cáo accuracy. Chương tiếp theo trình bày kiến trúc TextCNN, PhoBERT, keyword-aware head và distillation.
+
 
 % ==================== CHƯƠNG 3 ====================
 \chapter{PHƯƠNG PHÁP}
@@ -423,7 +472,42 @@ với \(T=2.0\), \(\beta=0.5\), \(\lambda_t=1.0\). Mục tiêu không phải vư
   \item Không fine-tune encoder PhoBERT.
 \end{itemize}
 
-\enlargethispage{3.5cm}
+\section{Thiết kế thực nghiệm}
+
+Thực nghiệm được chia thành các giai đoạn độc lập để dễ truy vết và tránh tune trên test.
+
+\begin{table}[H]
+\centering
+\caption{Ma trận thực nghiệm}
+\begin{tabularx}{\textwidth}{@{}clXc@{}}
+\toprule
+\textbf{ID} & \textbf{Mô hình} & \textbf{Mục đích} & \textbf{Seed} \\
+\midrule
+E0 & Data audit + EDA & Kiểm tra nhãn, phân bố, trùng lặp, độ dài & -- \\
+E1 & TF-IDF + Logistic Regression & Baseline tuyến tính, dễ giải thích & 42 \\
+E2 & TextCNN single-task & Baseline học sâu nhẹ, train từ đầu & 42 \\
+E3 & TextCNN multi-task & Đo ảnh hưởng của chia sẻ tham số & 42, 123, 2024 \\
+E4 & PhoBERT frozen multi-task & Tận dụng pretrained encoder trên CPU & 42, 123, 2024 \\
+E5 & PhoBERT keyword-aware & Đo ảnh hưởng của keyword + auxiliary loss & 42, 123, 2024 \\
+E6 & TextCNN distilled & Nén teacher thành student nhỏ & 42, 123, 2024 \\
+E7 & Calibration + robustness & Đánh giá độ tin cậy và độ bền & 42 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Các biến kiểm soát:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item Cùng split chính thức; không trộn test vào train.
+  \item Cùng metric: macro-F1 và joint accuracy.
+  \item Model selection chỉ dùng dev mean-F1.
+  \item Với TextCNN, giữ nguyên kiến trúc khi so single/multi.
+  \item Với PhoBERT, giữ nguyên encoder frozen khi so frozen/keyword.
+  \item Mỗi cấu hình cuối được đánh giá test một lần; kết quả 3 seed báo cáo mean \(\pm\) std.
+\end{itemize}
+
+Một số ablation không chạy đầy đủ do giới hạn thời gian, ví dụ grid search toàn bộ \(\lambda_t\), temperature, hoặc số layer fine-tune. Báo cáo chỉ kết luận từ các cấu hình đã chạy và ghi rõ phần chưa kiểm chứng.
+
 \section{Độ đo và kiểm định}
 
 \begin{itemize}[leftmargin=1.2cm]
@@ -434,6 +518,11 @@ với \(T=2.0\), \(\beta=0.5\), \(\lambda_t=1.0\). Mục tiêu không phải vư
   \item \textbf{ECE} (Expected Calibration Error) cho calibration.
   \item \textbf{Robustness}: mất dấu, teencode, typo, emoji, đảo trật tự từ.
 \end{itemize}
+
+
+\section*{Tóm tắt chương}
+Chương này trình bày công thức multi-task, cách tiền xử lý, kiến trúc TextCNN, PhoBERT frozen, keyword-aware head và knowledge distillation. Giao thức huấn luyện được thiết kế để chọn model bằng dev, đánh giá test một lần và lặp lại với 3 seed. Chương tiếp theo trình bày kết quả thực nghiệm và các kiểm định.
+
 
 % ==================== CHƯƠNG 4 ====================
 \chapter{THỰC NGHIỆM VÀ KẾT QUẢ}
@@ -528,6 +617,59 @@ Kết luận thống kê:
   \item Cải thiện \textbf{joint accuracy} so với cả PhoBERT frozen và TextCNN là nhất quán.
   \item Chưa đủ bằng chứng để khẳng định cải thiện sentiment F1.
   \item So với TextCNN, lợi thế topic không ổn định qua các seed.
+\end{itemize}
+
+\section{Ablation và phân tích per-class}
+
+Bảng \ref{tab:ablation} tổng hợp các so sánh có kiểm soát. Mỗi cặp chỉ thay một thành phần để có thể quy kết phần nào tạo ra chênh lệch.
+
+\begin{table}[H]
+\centering
+\caption{Ablation từ các cấu hình có sẵn (test, seed 42)}
+\label{tab:ablation}
+\begin{tabularx}{\textwidth}{@{}lXrrr@{}}
+\toprule
+\textbf{So sánh} & \textbf{Thay đổi} & \textbf{\(\Delta\) Sent} & \textbf{\(\Delta\) Topic} & \textbf{\(\Delta\) Joint} \\
+\midrule
+TextCNN single \(\rightarrow\) multi & Chia sẻ encoder, thêm topic head & -0.0065 & +0.0035 & +0.0016 \\
+PhoBERT frozen \(\rightarrow\) keyword & Thêm 12 keyword + aux loss & +0.0003 & +0.0205 & +0.0199 \\
+TextCNN hard \(\rightarrow\) distilled & Học thêm soft label của teacher & +0.0068 & +0.0099 & +0.0112 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Diễn giải:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item Multi-task TextCNN \textbf{không} cải thiện sentiment; có dấu hiệu negative transfer nhẹ. Topic tăng nhẹ nhưng chưa đủ lớn để kết luận.
+  \item Keyword features cải thiện topic rõ rệt nhưng gần như không đổi sentiment, đúng với thiết kế chỉ can thiệp vào topic head.
+  \item Distillation cải thiện cả ba metric so với student hard-label, cho thấy soft label của teacher có tác dụng regularize.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Per-class test của PhoBERT keyword-aware (seed 42)}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\textbf{Task} & \textbf{Lớp} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\midrule
+Sentiment & negative & 0.9262 & 0.9446 & 0.9353 \\
+Sentiment & neutral & 0.4966 & 0.4311 & 0.4615 \\
+Sentiment & positive & 0.9413 & 0.9377 & 0.9395 \\
+\midrule
+Topic & lecturer & 0.9235 & 0.9284 & 0.9260 \\
+Topic & training\_program & 0.7518 & 0.7255 & 0.7384 \\
+Topic & facility & 0.8766 & 0.9310 & 0.9030 \\
+Topic & others & 0.4873 & 0.4843 & 0.4858 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Hai điểm đáng chú ý:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item \texttt{neutral} vẫn là lớp khó nhất (F1 0.4615), do chỉ có 167 mẫu test và tín hiệu từ vựng mờ.
+  \item \texttt{others} có F1 thấp (0.4858), vì đây là lớp “phần còn lại”, không có keyword đặc trưng và rất đa dạng.
 \end{itemize}
 
 \section{Phân tích lỗi}
@@ -633,7 +775,71 @@ Emoji & 0.6661 & \textbf{0.7440} \\
 
 Kết quả cho thấy mất dấu là điểm yếu nghiêm trọng nhất của cả hai mô hình. Teacher nhạy với emoji và đảo trật tự từ hơn student; student bền vững hơn ở hai perturbation này nhưng yếu hơn ở clean test.
 
+
+\section*{Tóm tắt chương}
+Chương này trình bày kết quả một seed, kết quả 3 seed, kiểm định McNemar/bootstrap, ablation, per-class, distillation, calibration và robustness. Kết quả cho thấy keyword-aware PhoBERT cải thiện topic/joint, còn student distilled là trade-off hợp lý cho CPU. Chương tiếp theo mô tả demo và ý nghĩa thực tế.
+
+
 % ==================== CHƯƠNG 5 ====================
+\section{Thảo luận}
+
+\subsection{TextCNN và PhoBERT}
+
+Kết quả cho thấy PhoBERT frozen vượt TextCNN ở sentiment và joint, nhưng khoảng cách topic không lớn. Điều này hợp lý vì:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item PhoBERT đã học ngữ cảnh tiếng Việt từ corpus lớn, trong khi TextCNN chỉ học từ 11.426 câu train.
+  \item Topic phụ thuộc mạnh vào keyword bề mặt; TextCNN với convolution 3/4/5 đã bắt được các cụm này khá tốt.
+  \item Sentiment cần hiểu phủ định, mức độ và ngữ cảnh, nơi PhoBERT có lợi thế rõ hơn.
+\end{itemize}
+
+\subsection{TextCNN multi-task có thực sự tốt hơn?}
+
+Không có bằng chứng nhất quán. Sentiment giảm nhẹ, topic tăng nhẹ, joint gần như không đổi. Có hai cách giải thích:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item Hai task có tương quan nhưng không hoàn toàn đồng nhất; hard sharing có thể gây negative transfer.
+  \item TextCNN nhỏ, dung lượng hạn chế; chia sẻ hidden 256 cho hai head có thể tạo nút thắt.
+\end{itemize}
+
+Vì vậy báo cáo không tuyên bố multi-task luôn tốt hơn. Kết luận đúng là: với cấu hình này, multi-task không cải thiện rõ TextCNN, nhưng là nền tảng để thêm keyword head và distillation.
+
+\subsection{Keyword-aware: lợi ích và rủi ro}
+
+Keyword features giúp topic tăng 0.0205 so với PhoBERT frozen. Đây là mức cải thiện có ý nghĩa thống kê qua 3 seed. Tuy nhiên, cách làm này có rủi ro:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item Nếu keyword xuất hiện nhưng không phải chủ đề chính, model có thể bị kéo sai.
+  \item Keyword list do con người thiết kế, có thể thiên lệch theo tập train.
+  \item Câu không chứa keyword vẫn phụ thuộc hoàn toàn vào encoder.
+\end{itemize}
+
+Trong báo cáo, keyword được xem là \emph{inductive bias} có kiểm soát, không phải rule cứng.
+
+\subsection{Teacher hay student?}
+
+Hai mô hình phục vụ hai mục đích khác nhau:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item \textbf{Teacher}: dùng khi cần chất lượng cao nhất, chấp nhận 63.68 ms/câu.
+  \item \textbf{Student}: dùng khi cần throughput, chạy CPU, hoặc triển khai nội bộ với chi phí thấp.
+\end{itemize}
+
+Student nhỏ hơn 332 lần nhưng chỉ giảm khoảng 0.022 joint accuracy so với teacher. Đây là trade-off hợp lý cho nhiều kịch bản thực tế.
+
+\subsection{Câu nhiều chủ đề}
+
+Bài toán hiện là single-label. Với câu như “giảng viên tệ, cơ sở vật chất lỏ”, model buộc phải chọn một chủ đề. Demo đã cảnh báo và hiển thị top-2, nhưng về bản chất đây là giới hạn của dữ liệu, không phải lỗi softmax. Muốn giải quyết đúng cần multi-label annotation.
+
+\subsection{Threats to validity}
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item \textbf{Internal validity}: cùng một pipeline, cùng split; đã kiểm tra trùng lặp. Tuy nhiên chưa chạy full grid hyperparameter.
+  \item \textbf{External validity}: chỉ đánh giá trên UIT-VSFC, chưa cross-domain.
+  \item \textbf{Construct validity}: topic là nhãn mức câu, không phải aspect; sentiment cũng mức câu.
+  \item \textbf{Statistical validity}: 3 seed là nhỏ; McNemar/bootstrap giúp nhưng không thay thế nhiều seed hơn.
+\end{itemize}
+
 \chapter{DEMO VÀ Ý NGHĨA THỰC TẾ}
 
 \section{Kiến trúc demo}
@@ -690,7 +896,145 @@ Ví dụ, cặp \textit{negative + lecturer} gợi ý cần xem lại phản h�
   \item Không có đánh giá cross-domain.
 \end{itemize}
 
+
+\section*{Tóm tắt chương}
+Chương này mô tả demo Streamlit, quy trình sử dụng và ý nghĩa thực tế của hệ thống. Điểm chính là hệ thống đóng vai trò hỗ trợ triage phản hồi, không thay thế con người, và đã có cảnh báo multi-topic cùng confidence đã calibration. Chương tiếp theo trình bày các quyết định kỹ nghệ phần mềm và khả năng tái lập.
+
+
 % ==================== CHƯƠNG 6 ====================
+\chapter{KỸ NGHỆ PHẦN MỀM VÀ TÁI LẬP}
+
+Một điểm quan trọng của môn Lập trình Python nâng cao là sản phẩm không chỉ chạy được mà còn phải dễ đọc, dễ kiểm thử và tái lập. Chương này mô tả các quyết định kỹ nghệ phần mềm của nhóm.
+
+\section{Cấu trúc repository}
+
+\begin{verbatim}
+configs/        # hyperparameters YAML
+data/raw/       # dữ liệu gốc, bất biến
+data/processed/ # dữ liệu đã xử lý, không commit
+src/data/       # load, preprocess, dataset, EDA
+src/models/     # TextCNN, PhoBERT heads, baseline
+src/            # train, predict, calibration, robustness
+app/            # Streamlit demo
+reports/        # báo cáo, metric, hình
+tests/          # unit tests
+scripts/        # tiện ích môi trường
+\end{verbatim}
+
+Các nguyên tắc:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item Không sửa tay dữ liệu trong \texttt{data/processed/}; mọi biến đổi nằm trong script.
+  \item Không commit dữ liệu, model, cache hoặc file checkpoint.
+  \item Mỗi model có thư mục báo cáo riêng trong \texttt{reports/}.
+  \item \texttt{results.csv} ở root là nguồn tổng hợp duy nhất cho các model.
+\end{itemize}
+
+\section{Pipeline dữ liệu}
+
+Pipeline gồm các bước:
+
+\begin{enumerate}[leftmargin=1.2cm]
+  \item \texttt{src.data.load}: đọc file gốc, kiểm tra số dòng và label mapping.
+  \item \texttt{src.data.preprocess}: chuẩn hóa Unicode, tách từ, cache tokenized split.
+  \item \texttt{src.data.dataset}: tạo vocabulary, encode, collate cho từng loại model.
+  \item Trainer: load config, set seed, train, evaluate dev, chọn checkpoint.
+  \item Evaluator: ghi metric, per-class, confusion matrix và prediction.
+\end{enumerate}
+
+Việc cache tokenized split giúp các lần chạy sau nhanh hơn và giảm sai lệch do tiền xử lý khác nhau.
+
+\section{Quản lý cấu hình}
+
+Mỗi thí nghiệm dùng một file YAML trong \texttt{configs/}. Config ghi:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item seed, \(\lambda_t\), các tham số model;
+  \item batch size, learning rate, số epoch, patience;
+  \item đường dẫn dữ liệu và report.
+\end{itemize}
+
+CLI chỉ override các giá trị cần thiết như \texttt{--seed}, \texttt{--lambda-topic}, \texttt{--smoke-test}. Config thực tế được lưu lại trong checkpoint và metric JSON để truy vết.
+
+\section{Kiểm thử}
+
+Bộ test hiện có 33 test, bao phủ:
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item môi trường và import;
+  \item load dữ liệu, label mapping, EDA;
+  \item metric, dataset, model shape;
+  \item keyword features, distillation dataset;
+  \item calibration ECE và report paths.
+\end{itemize}
+
+Ngoài unit test, nhóm chạy smoke test cho tất cả trainer:
+
+\begin{verbatim}
+python -m src.train_textcnn --task both --smoke-test ...
+python -m src.train_textcnn_multitask --smoke-test ...
+python -m src.train_phobert_multitask --smoke-test ...
+python -m src.train_phobert_keyword_multitask --smoke-test ...
+python -m src.train_textcnn_distill --smoke-test ...
+\end{verbatim}
+
+Smoke test kiểm tra load dữ liệu, forward/backward, lưu checkpoint, load lại và predict một câu.
+
+\section{Tái lập}
+
+Các lệnh chính:
+
+\begin{verbatim}
+.\scripts\activate.ps1
+python -m src.data.load
+python -m src.data.eda
+python -m src.models.baseline
+python -m src.train_textcnn --task both
+python -m src.train_textcnn_multitask
+python -m src.train_phobert_multitask
+python -m src.train_phobert_keyword_multitask
+python -m src.data.teacher_logits
+python -m src.train_textcnn_distill
+python -m src.calibration
+python -m src.evaluate_robustness
+python -m src.statistical_tests
+.\scripts\run_demo.ps1
+\end{verbatim}
+
+Để tái lập kết quả 3 seed:
+
+\begin{verbatim}
+python -m src.train_textcnn_multitask --seed 42
+python -m src.train_textcnn_multitask --seed 123
+python -m src.train_textcnn_multitask --seed 2024
+\end{verbatim}
+
+\section{Git và báo cáo}
+
+Nhóm dùng Conventional Commits:
+
+\begin{verbatim}
+feat(phobert): add keyword-aware multi-task model
+feat(distill): add TextCNN student distillation
+chore(results): add three-seed evaluation
+docs(report): add LaTeX midterm report
+\end{verbatim}
+
+Mỗi thay đổi lớn có commit riêng, kèm mô tả và kết quả. Báo cáo được tổ chức theo model/stage trong \texttt{reports/}, có index tại \texttt{reports/README.md}.
+
+\section{Hạn chế kỹ nghệ}
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item Chưa có CI tự động; test được chạy thủ công trước commit.
+  \item Chưa có Docker/API; demo hiện là Streamlit chạy local.
+  \item Chưa có logging tập trung; trainer in ra stdout và lưu metric JSON.
+  \item Chưa có benchmark đa nền tảng; latency đo trên một CPU cụ thể.
+\end{itemize}
+
+
+\section*{Tóm tắt chương}
+Chương này trình bày cấu trúc repository, pipeline dữ liệu, quản lý config, kiểm thử, tái lập và quy trình Git. Các quyết định này giúp kết quả có thể kiểm tra lại, đồng thời chỉ ra các hạn chế kỹ nghệ còn lại như thiếu CI và Docker. Chương cuối tổng kết toàn bộ đề tài.
+
 \chapter{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
 
 \section{Kết luận}
@@ -715,6 +1059,30 @@ Ví dụ, cặp \textit{negative + lecturer} gợi ý cần xem lại phản h�
   \item Robustness với mất dấu và teencode còn yếu.
 \end{itemize}
 
+\section{Bài học kinh nghiệm}
+
+\begin{enumerate}[leftmargin=1.2cm]
+  \item \textbf{Dữ liệu quan trọng hơn model.} Kiểm tra label mapping và phân bố lớp giúp tránh nhiều lỗi khó hiểu về sau.
+  \item \textbf{Baseline phải chạy trước.} TF-IDF đơn giản nhưng cho thấy mức độ khó thật sự của bài toán và là mốc so sánh đáng tin.
+  \item \textbf{Một seed là chưa đủ.} Phương sai giữa các seed của PhoBERT frozen khá lớn; báo cáo mean \(\pm\) std và kiểm định thống kê cần thiết hơn một con số đẹp.
+  \item \textbf{Chọn model bằng dev.} Test chỉ nên được đánh giá một lần cho cấu hình cuối; nếu không, kết quả sẽ bị lạc quan.
+  \item \textbf{Đánh giá phải đi kèm giới hạn.} Calibration và robustness cho thấy model yếu ở đâu; multi-topic warning cho thấy bài toán chưa được giải quyết trọn vẹn.
+  \item \textbf{Đơn giản có giá trị.} Distillation cho thấy một student nhỏ có thể giữ phần lớn chất lượng với chi phí thấp hơn nhiều.
+\end{enumerate}
+
+\section{Checklist tái lập}
+
+\begin{itemize}[leftmargin=1.2cm]
+  \item[$\circ$] Cài đúng Python 3.12 và dependencies.
+  \item[$\circ$] Tải đúng UIT-VSFC, kiểm tra số dòng và label mapping.
+  \item[$\circ$] Chạy EDA và lưu hình/bảng.
+  \item[$\circ$] Chạy baseline trước khi train model học sâu.
+  \item[$\circ$] Chạy 3 seed cho model chính.
+  \item[$\circ$] Chạy calibration, robustness và statistical tests.
+  \item[$\circ$] Chạy `pytest` và smoke test.
+  \item[$\circ$] Compile lại báo cáo LaTeX.
+\end{itemize}
+
 \section{Hướng phát triển}
 
 \begin{enumerate}[leftmargin=1.2cm]
@@ -725,6 +1093,11 @@ Ví dụ, cặp \textit{negative + lecturer} gợi ý cần xem lại phản h�
   \item Calibration nâng cao (temperature theo lớp, label smoothing).
   \item Đóng gói API/Docker và dashboard cho đơn vị đảm bảo chất lượng.
 \end{enumerate}
+
+\section{Tổng kết}
+Đề tài đã trả lời được bốn câu hỏi thực nghiệm: TextCNN và PhoBERT khác nhau thế nào trên UIT-VSFC; multi-task có giúp ích không; keyword-aware có cải thiện topic không; và có thể nén mô hình xuống CPU mà vẫn giữ chất lượng hay không. Kết quả cho thấy lợi ích rõ nhất đến từ PhoBERT và keyword-aware head, trong khi multi-task TextCNN chưa đủ bằng chứng để vượt single-task.
+
+Về mặt ứng dụng, hệ thống phù hợp nhất với vai trò \emph{triage}: lọc phản hồi tiêu cực, gợi ý chủ đề và ưu tiên xem xét. Hệ thống không thay thế con người, không đưa ra kết luận về cá nhân giảng viên và cần được kiểm tra lại trước khi dùng cho quyết định hành chính. Các hạn chế về multi-topic, mất dấu và cross-domain là hướng mở rộng tự nhiên của đề tài.
 
 % ==================== TÀI LIỆU ====================
 \clearpage
@@ -769,45 +1142,5 @@ Psychometrika, 12(2), 153--157.
 \end{thebibliography}
 
 % ==================== PHỤ LỤC ====================
-\appendix
-\chapter{MÃ NGUỒN VÀ LỆNH TÁI LẬP}
-
-\section{Cấu trúc chính}
-
-\begin{verbatim}
-configs/        # hyperparameters
-src/data/       # load, preprocess, dataset, EDA
-src/models/     # TextCNN, PhoBERT heads
-src/            # train, predict, calibration, robustness
-app/            # Streamlit demo
-reports/        # báo cáo, metric, hình
-tests/          # unit tests
-\end{verbatim}
-
-\section{Lệnh chạy}
-
-\begin{verbatim}
-.\scripts\activate.ps1
-python -m src.data.load
-python -m src.data.eda
-python -m src.models.baseline
-python -m src.train_textcnn --task both
-python -m src.train_textcnn_multitask
-python -m src.train_phobert_multitask
-python -m src.train_phobert_keyword_multitask
-python -m src.data.teacher_logits
-python -m src.train_textcnn_distill
-python -m src.calibration
-python -m src.evaluate_robustness
-python -m src.statistical_tests
-.\scripts\run_demo.ps1
-\end{verbatim}
-
-\section{Kiểm tra}
-
-\begin{verbatim}
-pytest
-ruff check src tests scripts app --no-cache
-\end{verbatim}
 
 \end{document}
