@@ -241,7 +241,7 @@ Các công trình riêng lẻ đã giải quyết từng phần: multi-task, Pho
 
 \section{Cấu trúc báo cáo}
 
-Chương 2 trình bày dữ liệu và EDA. Chương 3 mô tả phương pháp. Chương 4 trình bày thực nghiệm và kết quả. Chương 5 mô tả demo và ý nghĩa thực tế. Chương 6 trình bày kỹ nghệ phần mềm và tái lập. Chương 7 kết luận và hướng phát triển.
+Chương 2 trình bày dữ liệu và EDA. Chương 3 mô tả phương pháp. Chương 4 trình bày thực nghiệm và kết quả. Chương 5 mô tả demo, ý nghĩa thực tế và tái lập. Chương 6 kết luận và hướng phát triển.
 
 
 \section*{Tóm tắt chương}
@@ -897,16 +897,11 @@ Ví dụ, cặp \textit{negative + lecturer} gợi ý cần xem lại phản h�
 \end{itemize}
 
 
-\section*{Tóm tắt chương}
-Chương này mô tả demo Streamlit, quy trình sử dụng và ý nghĩa thực tế của hệ thống. Điểm chính là hệ thống đóng vai trò hỗ trợ triage phản hồi, không thay thế con người, và đã có cảnh báo multi-topic cùng confidence đã calibration. Chương tiếp theo trình bày các quyết định kỹ nghệ phần mềm và khả năng tái lập.
+\section{Tái lập và triển khai}
 
+Một điểm quan trọng của môn Lập trình Python nâng cao là sản phẩm không chỉ chạy được mà còn phải dễ đọc, dễ kiểm thử và tái lập. Phần này mô tả các quyết định kỹ nghệ phần mềm của nhóm, từ cấu trúc repo đến kiểm thử và quy trình Git.
 
-% ==================== CHƯƠNG 6 ====================
-\chapter{KỸ NGHỆ PHẦN MỀM VÀ TÁI LẬP}
-
-Một điểm quan trọng của môn Lập trình Python nâng cao là sản phẩm không chỉ chạy được mà còn phải dễ đọc, dễ kiểm thử và tái lập. Chương này mô tả các quyết định kỹ nghệ phần mềm của nhóm.
-
-\section{Cấu trúc repository}
+\subsection{Cấu trúc repository}
 
 \begin{verbatim}
 configs/        # hyperparameters YAML
@@ -930,7 +925,7 @@ Các nguyên tắc:
   \item \texttt{results.csv} ở root là nguồn tổng hợp duy nhất cho các model.
 \end{itemize}
 
-\section{Pipeline dữ liệu}
+\subsection{Pipeline dữ liệu}
 
 Pipeline gồm các bước:
 
@@ -944,7 +939,7 @@ Pipeline gồm các bước:
 
 Việc cache tokenized split giúp các lần chạy sau nhanh hơn và giảm sai lệch do tiền xử lý khác nhau.
 
-\section{Quản lý cấu hình}
+\subsection{Quản lý cấu hình}
 
 Mỗi thí nghiệm dùng một file YAML trong \texttt{configs/}. Config ghi:
 
@@ -956,7 +951,7 @@ Mỗi thí nghiệm dùng một file YAML trong \texttt{configs/}. Config ghi:
 
 CLI chỉ override các giá trị cần thiết như \texttt{--seed}, \texttt{--lambda-topic}, \texttt{--smoke-test}. Config thực tế được lưu lại trong checkpoint và metric JSON để truy vết.
 
-\section{Kiểm thử}
+\subsection{Kiểm thử}
 
 Bộ test hiện có 33 test, bao phủ:
 
@@ -980,7 +975,7 @@ python -m src.train_textcnn_distill --smoke-test ...
 
 Smoke test kiểm tra load dữ liệu, forward/backward, lưu checkpoint, load lại và predict một câu.
 
-\section{Tái lập}
+\subsection{Tái lập}
 
 Các lệnh chính:
 
@@ -1009,7 +1004,7 @@ python -m src.train_textcnn_multitask --seed 123
 python -m src.train_textcnn_multitask --seed 2024
 \end{verbatim}
 
-\section{Git và báo cáo}
+\subsection{Git và báo cáo}
 
 Nhóm dùng Conventional Commits:
 
@@ -1022,7 +1017,7 @@ docs(report): add LaTeX midterm report
 
 Mỗi thay đổi lớn có commit riêng, kèm mô tả và kết quả. Báo cáo được tổ chức theo model/stage trong \texttt{reports/}, có index tại \texttt{reports/README.md}.
 
-\section{Hạn chế kỹ nghệ}
+\subsection{Hạn chế kỹ nghệ}
 
 \begin{itemize}[leftmargin=1.2cm]
   \item Chưa có CI tự động; test được chạy thủ công trước commit.
@@ -1033,7 +1028,7 @@ Mỗi thay đổi lớn có commit riêng, kèm mô tả và kết quả. Báo c
 
 
 \section*{Tóm tắt chương}
-Chương này trình bày cấu trúc repository, pipeline dữ liệu, quản lý config, kiểm thử, tái lập và quy trình Git. Các quyết định này giúp kết quả có thể kiểm tra lại, đồng thời chỉ ra các hạn chế kỹ nghệ còn lại như thiếu CI và Docker. Chương cuối tổng kết toàn bộ đề tài.
+Chương này trình bày demo Streamlit, quy trình sử dụng, ý nghĩa thực tế và các quyết định kỹ nghệ để tái lập kết quả: cấu trúc repository, pipeline dữ liệu, quản lý config, kiểm thử, tái lập và Git. Các nội dung này cho thấy hệ thống không chỉ là một model mà là một pipeline có thể kiểm tra lại, đồng thời vẫn còn hạn chế về CI và Docker. Chương cuối tổng kết toàn bộ đề tài.
 
 \chapter{KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN}
 
