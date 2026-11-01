@@ -18,26 +18,27 @@ Chạy hai lần để cập nhật tổng số slide và tham chiếu.
 
 ## Nội dung
 
-21 slide, 16:9:
+22 slide, 16:9:
 
 1. Bìa
 2. Phân công thuyết trình
-3. Bài toán và động lực
-4. Mục tiêu và đóng góp
-5. Pipeline tổng quan
-6. UIT-VSFC
-7. EDA
-8. Multi-task learning
-9. TextCNN
-10. PhoBERT + keyword-aware
-11. Thiết lập thực nghiệm
-12. Kết quả seed 42
-13. Kết quả 3 seed
-14. Kiểm định thống kê
-15. Distillation
-16. Calibration
-17. Robustness
-18. Demo và ý nghĩa thực tế
-19. Hạn chế
-20. Kết luận và hướng phát triển
-21. Q&A
+3. Luồng bàn giao giữa 3 người
+4. Bài toán và động lực
+5. Mục tiêu và đóng góp
+6. Pipeline tổng quan
+7. UIT-VSFC
+8. EDA
+9. Multi-task learning
+10. TextCNN
+11. PhoBERT + keyword-aware
+12. Thiết lập thực nghiệm
+13. Kết quả seed 42
+14. Kết quả 3 seed
+15. Kiểm định thống kê
+16. Distillation
+17. Calibration
+18. Robustness
+19. Demo và ý nghĩa thực tế
+20. Hạn chế
+21. Kết luận và hướng phát triển
+22. Q&A

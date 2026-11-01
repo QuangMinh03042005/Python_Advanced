@@ -59,21 +59,33 @@
 
 % ==================== 1. BÌA ====================
 \begin{frame}[plain]
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[line width=1.1pt, color=sgublue]
+    ([xshift=0.38cm,yshift=-0.38cm]current page.north west)
+    rectangle
+    ([xshift=-0.38cm,yshift=0.38cm]current page.south east);
+  \draw[line width=0.35pt, color=sgublue]
+    ([xshift=0.50cm,yshift=-0.50cm]current page.north west)
+    rectangle
+    ([xshift=-0.50cm,yshift=0.50cm]current page.south east);
+\end{tikzpicture}
 \begin{center}
-\includegraphics[width=1.9cm]{../reports/SGU-LOGO.png}\\[0.15cm]
-{\small\bfseries TRƯỜNG ĐẠI HỌC SÀI GÒN -- KHOA TOÁN - ỨNG DỤNG}\\[0.1cm]
-{\small BÁO CÁO GIỮA KÌ}\\[0.25cm]
-{\Large\bfseries Multi-task Learning cho Phân loại Cảm xúc\\[0.08cm]
-và Chủ đề Phản hồi Sinh viên Tiếng Việt}\\[0.18cm]
-{\large So sánh TextCNN và PhoBERT}\\[0.30cm]
-{\small
-\begin{tabular}{@{}c@{}}
+\vspace*{-0.15cm}
+{\scriptsize\bfseries ỦY BAN NHÂN DÂN THÀNH PHỐ HỒ CHÍ MINH}\\[0.02cm]
+{\small\bfseries TRƯỜNG ĐẠI HỌC SÀI GÒN}\\[0.01cm]
+{\scriptsize\bfseries KHOA TOÁN - ỨNG DỤNG}\\[0.06cm]
+\includegraphics[width=1.35cm]{../reports/SGU-LOGO.png}\\[0.05cm]
+{\scriptsize BÁO CÁO GIỮA KÌ}\\[0.07cm]
+{\large\bfseries Multi-task Learning cho Phân loại Cảm xúc\\
+và Chủ đề Phản hồi Sinh viên Tiếng Việt}\\[0.05cm]
+{\small So sánh TextCNN và PhoBERT}\\[0.10cm]
+{\scriptsize Ngành: Khoa học dữ liệu \quad|\quad Môn: Lập trình Python nâng cao (858043)}\\[0.04cm]
+{\scriptsize GVHD: TS. Trịnh Tấn Đạt}\\[0.06cm]
+{\scriptsize
 Đinh Quang Minh (3123580024) -- Nhóm trưởng\\
 Dương Tấn Cường (3123580004)\\
-Lê Thành Duy (3123580007)
-\end{tabular}}\\[0.22cm]
-{\small GVHD: TS. Trịnh Tấn Đạt \quad|\quad Lập trình Python nâng cao (858043)}\\[0.25cm]
-{\small Thành phố Hồ Chí Minh, tháng 11 năm 2026}
+Lê Thành Duy (3123580007)}\\[0.07cm]
+{\scriptsize Thành phố Hồ Chí Minh, tháng 11 năm 2026}
 \end{center}
 \end{frame}
 
@@ -86,7 +98,7 @@ Người & Nội dung & Thời lượng \\
 \midrule
 Đinh Quang Minh &
 Mở đầu, bài toán, mục tiêu, pipeline; demo, ý nghĩa thực tế, kết luận. &
-7 phút \\
+8 phút \\
 \addlinespace
 Dương Tấn Cường &
 UIT-VSFC, EDA, TextCNN, PhoBERT, keyword-aware head; hạn chế. &
@@ -106,7 +118,35 @@ Minh mở đầu $\rightarrow$ Cường trình bày dữ liệu và mô hình $\
 \end{block}
 \end{frame}
 
-% ==================== 3. BÀI TOÁN ====================
+% ==================== 3. LUỒNG BÀN GIAO ====================
+\begin{frame}{Luồng trình bày: ai nói gì, bàn giao cho ai}
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}p{2.1cm}p{1.1cm}X>{\bfseries}p{2.0cm}@{}}
+\toprule
+Người & Slide & Nội dung & Bàn giao cho \\
+\midrule
+Minh & 1--6 & Mở đầu, bài toán, mục tiêu, pipeline & Cường \\
+Cường & 7--11 & UIT-VSFC, EDA, multi-task, TextCNN, PhoBERT, keyword & Duy \\
+Duy & 12--18 & Thực nghiệm, kết quả, kiểm định, distillation, calibration, robustness & Minh \\
+Minh & 19 & Demo và ý nghĩa thực tế & Cường \\
+Cường & 20 & Hạn chế & Minh \\
+Minh & 21--22 & Kết luận và Q\&A & Kết thúc \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.2cm}
+\begin{block}{Câu chuyển}
+\begin{itemize}
+  \item Minh $\rightarrow$ Cường: “Để hiểu dữ liệu, mời Cường.”
+  \item Cường $\rightarrow$ Duy: “Kết quả thực nghiệm, mời Duy.”
+  \item Duy $\rightarrow$ Minh: “Minh sẽ demo và nói ý nghĩa thực tế.”
+  \item Minh $\rightarrow$ Cường: “Cường bổ sung hạn chế.”
+  \item Cường $\rightarrow$ Minh: “Minh chốt lại.”
+\end{itemize}
+\end{block}
+\end{frame}
+
+% ==================== 4. BÀI TOÁN ====================
 \begin{frame}{Bài toán và động lực}
 \begin{columns}[T]
 \begin{column}{0.55\textwidth}
@@ -665,7 +705,7 @@ positive + lecturer & Ghi nhận, nhân rộng \\
 
 \vspace{0.2cm}
 \begin{block}{Thông điệp}
-Hệ thống là công cụ \emph{hỗ trợ} đọc và ưu tiên phản hồi, không thay thế đánh giá của con người.
+Hệ thống là công cụ \emph{hỗ trợ} đọc và ưu tiên phản hồi, không thay thế con người.
 \end{block}
 \end{frame}
 
