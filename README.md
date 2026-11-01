@@ -22,6 +22,7 @@
 - [x] 3-seed evaluation
 - [x] Demo Streamlit
 - [x] Báo cáo LaTeX + PDF
+- [x] Slide Beamer + kế hoạch thuyết trình
 
 ## Yêu cầu
 
@@ -516,16 +517,22 @@ torch 2.14.1+cpu cuda False
 PhobertTokenizer
 ```
 
-## Báo cáo
+## Báo cáo và slide
 
-- PDF: [report/main.pdf](report/main.pdf)
-- LaTeX source: [report/main.tex](report/main.tex)
-- Hướng dẫn compile: [report/README.md](report/README.md)
+- Báo cáo PDF: [report/main.pdf](report/main.pdf)
+- Báo cáo LaTeX: [report/main.tex](report/main.tex)
+- Slide PDF: [slides/main.pdf](slides/main.pdf)
+- Slide LaTeX: [slides/main.tex](slides/main.tex)
+- Phân công thuyết trình: [slides/presentation_plan.md](slides/presentation_plan.md)
 
 Compile lại:
 
 ```powershell
 cd report
+xelatex -interaction=nonstopmode main.tex
+xelatex -interaction=nonstopmode main.tex
+
+cd ..\slides
 xelatex -interaction=nonstopmode main.tex
 xelatex -interaction=nonstopmode main.tex
 ```
